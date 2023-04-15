@@ -220,10 +220,16 @@ for i in listoffiles:
         index_col=0,
         engine = "openpyxl",
         header=8,
-        usecols = "A,B,F,H,I,L,M",
+        # usecols = "A,B,F,H,I,L,M",
+        usecols = "A,B,F,H,I,K,L,M",
         )
     df_from_excel.reset_index(inplace = True)
-    df_from_excel = df_from_excel.rename(columns={"ТТН.Время прибытия": "прибытие", "Выгрузка окончание (по счетчику)": "выгрузка"})
+    # df_from_excel = df_from_excel.rename(columns={"ТТН.Время прибытия": "прибытие", "Выгрузка окончание (по счетчику)": "выгрузка"})
+    df_from_excel = df_from_excel.rename(columns={
+        "ТТН.Время прибытия": "прибытие",
+        "Выгрузка окончание (по счетчику)": "выгрузка",
+        "Содержимое зобов и ЖКТ, кг": "жкт",
+        })
     df_from_excel["площ"] = np.nan
     df_from_excel["сдача"] = np.nan
     df_from_excel["корп"] = np.nan
@@ -273,6 +279,16 @@ for i in listoffiles:
     df_from_excel["Падеж вес"] = pd.to_numeric(df_from_excel["Падеж вес"], errors="coerce")
     df_from_excel["Падеж вес"] = df_from_excel["Падеж вес"].fillna(0)
     df_from_excel["площ"] = df_from_excel["площ"].astype(str)
+    #
+    # print("\ndf_from_excel")
+    # print(df_from_excel)
+    # exit()
+    df_from_excel["жкт"] = df_from_excel["жкт"].fillna("")
+    df_from_excel["жкт"] = df_from_excel["жкт"].str.replace(",",".")
+    df_from_excel["жкт"] = pd.to_numeric(df_from_excel["жкт"], errors="coerce")
+    df_from_excel["жкт"] = df_from_excel["жкт"].fillna(0)
+    df_from_excel["Живок вес"] = df_from_excel["Живок вес"] - df_from_excel["жкт"]
+    df_from_excel = df_from_excel.drop(["жкт"], axis = 1)
     #
     df_from_excel.loc[df_from_excel["площ"].str.contains("Коренская"), ["площ"]] = "Коренское"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Графовская"), ["площ"]] = "Графовское"

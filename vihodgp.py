@@ -6,9 +6,16 @@ import shutil
 
 import openpyxl
 import pandas as pd
+import rich
+from rich.console import Console
+from rich.traceback import install
+
+install(suppress=[rich], show_locals=False)
+console = Console()
 
 # import numpy as np
 # import sidetable
+
 import функции
 
 pd.set_option("display.max_rows", 1500)
@@ -204,6 +211,7 @@ for i in listoffiles:
     # exit()
 
     # Накопительный отчет - бройлеры---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # with console.status("Working...", spinner="bouncingBall"):
     df_цб = pd.read_excel(
                 filename0b,
                 sheet_name="Убой ШПК",
@@ -339,12 +347,20 @@ for i in listoffiles:
         print("\nвес в отчет")
         print(вес_в_отчет)
     ср_вес = вес_в_отчет/гол_в_отчет
+    # вес
     осн_вес = df_цб.loc[(df_цб["т_сдачи"].str.contains("Основная")==True)]["вес"].sum()
     print("\nосновная сдача вес")
     print(осн_вес)
     разр_вес = df_цб.loc[(df_цб["т_сдачи"].str.contains("Разрежение")==True)]["вес"].sum()
     print("\nразрежение вес")
     print(разр_вес)
+    # головы
+    осн_гол = df_цб.loc[(df_цб["т_сдачи"].str.contains("Основная")==True)]["гол"].sum()
+    print("\nосновная сдача головы")
+    print(осн_гол)
+    разр_гол = df_цб.loc[(df_цб["т_сдачи"].str.contains("Разрежение")==True)]["гол"].sum()
+    print("\nразрежение головы")
+    print(разр_гол)
     # exit()
 
     # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -367,86 +383,89 @@ for i in listoffiles:
                 "B3": ср_вес,
                 "B5": осн_вес,
                 "B6": разр_вес,
+                "D5": осн_гол,
+                "D6": разр_гол,
             },
     }
 
-    функции.writing_openpyxl(
-        filename = filename_отч,
-        cellvals_dict = cellvals_dict,
-    )
-    # exit()
-    функции.df_to_excel_openpyxl(
-        filename = filename_отч,
-        разновидность = "Выпуск_Возврат",
-        df_для_записи = df_осн,
-        rowtostartin_pd = 5,
-        coltostartin_pd = 0,
-        всего_colnum_offset = 2,
-        неприказ_belowtablenames_offset = 0,
-        приказ_belowtablenames_offset = 0,
-        clearing_marker = "Итого",
-        clearing_marker_col = 1,
-        clearing_offset = 1,
-        remove_borders = 0,
-        change_alignment = 0,
-        add_borders = 0,
-        aggr_row = 0,
-        font_change_scope = 0,
-    )
-    
-    функции.df_to_excel_openpyxl(
-        filename = filename_отч,
-        разновидность = "Выпуск_Возврат",
-        df_для_записи = df_кур,
-        rowtostartin_pd = 5,
-        coltostartin_pd = 8,
-        всего_colnum_offset = 2,
-        неприказ_belowtablenames_offset = 0,
-        приказ_belowtablenames_offset = 0,
-        clearing_marker = "Итого",
-        clearing_marker_col = 1,
-        clearing_offset = 1,
-        remove_borders = 1,
-        change_alignment = 0,
-        add_borders = 0,
-        aggr_row = 0,
-        font_change_scope = 0,
-    )
+    with console.status("Working...", spinner="bouncingBall"):
+        функции.writing_openpyxl(
+            filename = filename_отч,
+            cellvals_dict = cellvals_dict,
+        )
+        
+        функции.df_to_excel_openpyxl(
+            filename = filename_отч,
+            разновидность = "Выпуск_Возврат",
+            df_для_записи = df_осн,
+            rowtostartin_pd = 5,
+            coltostartin_pd = 0,
+            всего_colnum_offset = 2,
+            неприказ_belowtablenames_offset = 0,
+            приказ_belowtablenames_offset = 0,
+            clearing_marker = "Итого",
+            clearing_marker_col = 1,
+            clearing_offset = 1,
+            remove_borders = 0,
+            change_alignment = 0,
+            add_borders = 0,
+            aggr_row = 0,
+            font_change_scope = 0,
+        )
+        
+        функции.df_to_excel_openpyxl(
+            filename = filename_отч,
+            разновидность = "Выпуск_Возврат",
+            df_для_записи = df_кур,
+            rowtostartin_pd = 5,
+            coltostartin_pd = 8,
+            всего_colnum_offset = 2,
+            неприказ_belowtablenames_offset = 0,
+            приказ_belowtablenames_offset = 0,
+            clearing_marker = "Итого",
+            clearing_marker_col = 1,
+            clearing_offset = 1,
+            remove_borders = 1,
+            change_alignment = 0,
+            add_borders = 0,
+            aggr_row = 0,
+            font_change_scope = 0,
+        )
 
-    функции.df_to_excel_openpyxl(
-        filename = filename_отч,
-        разновидность = "Выпуск_Возврат",
-        df_для_записи = df_то,
-        rowtostartin_pd = 270,
-        coltostartin_pd = 13,
-        всего_colnum_offset = 2,
-        неприказ_belowtablenames_offset = 0,
-        приказ_belowtablenames_offset = 0,
-        clearing_marker = "Итого",
-        clearing_marker_col = 1,
-        clearing_offset = 27,
-        remove_borders = 0,
-        change_alignment = 0,
-        add_borders = 0,
-        aggr_row = 0,
-        font_change_scope = 0,
-    )
-    
-    функции.df_to_excel_openpyxl(
-        filename = filename_отч,
-        разновидность = "Выпуск_Возврат",
-        df_для_записи = df_пп,
-        rowtostartin_pd = 282,
-        coltostartin_pd = 13,
-        всего_colnum_offset = 2,
-        неприказ_belowtablenames_offset = 0,
-        приказ_belowtablenames_offset = 0,
-        clearing_marker = "Итого",
-        clearing_marker_col = 1,
-        clearing_offset = 15,
-        remove_borders = 0,
-        change_alignment = 0,
-        add_borders = 0,
-        aggr_row = 0,
-        font_change_scope = 0,
-    )
+        функции.df_to_excel_openpyxl(
+            filename = filename_отч,
+            разновидность = "Выпуск_Возврат",
+            df_для_записи = df_то,
+            rowtostartin_pd = 270,
+            coltostartin_pd = 13,
+            всего_colnum_offset = 2,
+            неприказ_belowtablenames_offset = 0,
+            приказ_belowtablenames_offset = 0,
+            clearing_marker = "Итого",
+            clearing_marker_col = 1,
+            clearing_offset = 27,
+            remove_borders = 0,
+            change_alignment = 0,
+            add_borders = 0,
+            aggr_row = 0,
+            font_change_scope = 0,
+        )
+        
+        функции.df_to_excel_openpyxl(
+            filename = filename_отч,
+            разновидность = "Выпуск_Возврат",
+            df_для_записи = df_пп,
+            rowtostartin_pd = 282,
+            coltostartin_pd = 13,
+            всего_colnum_offset = 2,
+            неприказ_belowtablenames_offset = 0,
+            приказ_belowtablenames_offset = 0,
+            clearing_marker = "Итого",
+            clearing_marker_col = 1,
+            clearing_offset = 15,
+            remove_borders = 0,
+            change_alignment = 0,
+            add_borders = 0,
+            aggr_row = 0,
+            font_change_scope = 0,
+        )

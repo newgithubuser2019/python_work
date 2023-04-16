@@ -1,5 +1,6 @@
 # IMPORTS
 import datetime
+import decimal
 import os
 import re
 import shutil
@@ -361,6 +362,16 @@ for i in listoffiles:
     разр_гол = df_цб.loc[(df_цб["т_сдачи"].str.contains("Разрежение")==True)]["гол"].sum()
     print("\nразрежение головы")
     print(разр_гол)
+    # средний вес
+    осн_ср_вес = decimal.Decimal(осн_вес/осн_гол)
+    # switch_value
+    switch_value = 0
+    if осн_ср_вес < 2.2 or осн_ср_вес == 2.2:
+        switch_value = decimal.Decimal("2.2")
+    if осн_ср_вес > 2.3 or осн_ср_вес == 2.3:
+        switch_value = decimal.Decimal("2.3")
+    if осн_ср_вес > 2.2 and осн_ср_вес < 2.3:
+        switch_value = осн_ср_вес.quantize(decimal.Decimal("0.0"))
     # exit()
 
     # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -385,6 +396,7 @@ for i in listoffiles:
                 "B6": разр_вес,
                 "D5": осн_гол,
                 "D6": разр_гол,
+                "H5": switch_value,
             },
     }
 

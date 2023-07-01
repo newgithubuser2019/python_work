@@ -364,6 +364,12 @@ for i in listoffiles:
     print(разр_гол)
     # средний вес
     осн_ср_вес = decimal.Decimal(осн_вес/осн_гол)
+    # print("\nосн_вес")
+    # print(осн_вес)
+    # print("\nосн_гол")
+    # print(осн_гол)
+    # print("\nосн_ср_вес")
+    # print(осн_ср_вес)
     # switch_value
     switch_value = 0
     if осн_ср_вес < 2.2 or осн_ср_вес == 2.2:

@@ -53,5 +53,32 @@ findf = pd.DataFrame()
 # path1 = USERPROFILE + "\\Documents\\Работа\\отчетность\\выход гп\\акты\\"
 # listoffiles = os.listdir(path1)
 # filename0 = USERPROFILE + "\\Documents\\Работа\\отчетность\\накопительный отчет\\Накопительный (старка) Белгород 2022.xlsx"
+filename0 = USERPROFILE + "\\Documents\\Google Sheets Test.xlsx"
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+"""
+SHEET_ID = '1Y56CvHeHegMYlx1V-bzC9jc7cqRf7tLgRcIvRKbn5sk'
+SHEET_NAME = 'Subscriptions'
+url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
+#df = pd.read_excel(url, header=0, usecols="A,B,C,D", engine="openpyxl")
+df = pd.read_csv(url, header=0)
+print(df.head())
+df = df["Full Name", "Amount"]
+print(df.head())
+"""
+df = pd.read_excel(
+                filename0,
+                sheet_name="Subscriptions",
+                index_col=None,
+                engine = "openpyxl",
+                header=0,
+                usecols = "A:G",
+                #dtype = {"I": str},
+                )
+df["First Name"] = df["Full Name"].str.rsplit(" ").str[0]
+df["Last Name"] = df["Full Name"].str.rsplit(" ").str[-1]
+print(df.head())
+#df_active = df.drop(df.loc[df["Status"]=="Inactive"].index)
+df_active = df.loc[df["Status"]=="Active"]
+print(df_active)

@@ -363,7 +363,11 @@ for i in listoffiles:
     print("\nразрежение головы")
     print(разр_гол)
     # средний вес
-    осн_ср_вес = decimal.Decimal(осн_вес/осн_гол)
+    # if осн_гол == 0:
+    if df_цб.loc[(df_цб["т_сдачи"].str.contains("Основная")==True)].empty:
+        осн_ср_вес = 0
+    else:
+        осн_ср_вес = decimal.Decimal(осн_вес/осн_гол)
     # print("\nосн_вес")
     # print(осн_вес)
     # print("\nосн_гол")

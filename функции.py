@@ -511,7 +511,7 @@ def df_to_excel_openpyxl(
     приказ_belowtablenames_offset,
     clearing_marker,
     clearing_marker_col, # openpyxl column, not pandas column - so basically it equals excel col number
-    clearing_offset, # rownum of clearing marker - rownum of first row you don"t want to clear + 1
+    clearing_offset, # rownum of clearing marker - rownum of first row you don't want to clear + 1
     remove_borders, # whether or not to remove borders within clearing range (1-yes, 0-no)
     change_alignment,
     add_borders,
@@ -633,6 +633,10 @@ def df_to_excel_openpyxl(
         # print(endrowforclearing)
         
         # clearing cells and removing borders
+        if clearing_marker == "удалить все":
+            endrowforclearing = rowmax + 1
+            # print(endrowforclearing)
+            # exit()
         op_tuple = tuple(ws[startcellLetter_op + str(rowtostartin_pd + 1):endcellLetter_op + str(endrowforclearing)])
         for rowsofcells in op_tuple:
             for cellsinrows in rowsofcells:

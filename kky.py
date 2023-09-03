@@ -9,9 +9,16 @@ import time
 import numpy as np
 import openpyxl
 import pandas as pd
-# import sidetable
+import rich
+from rich.console import Console
+from rich.traceback import install
 
 import функции
+
+# import sidetable
+
+install(suppress=[rich], show_locals=False)
+console = Console()
 
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
@@ -43,6 +50,7 @@ prompt1 = "\nреализация?: "
 prompt2 = "\nзаписать в отчет напрямую?: "
 prompt3 = "\nномер строки для записи в отчет напрямую (нумерация excel) - бройлеры?: "
 prompt4 = "\nномер строки для записи в отчет напрямую (нумерация excel) - старка?: "
+prompt5 = "\nзаписать df_pivot в накопительный отчет?: "
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # user inputs
@@ -54,6 +62,8 @@ if inp2 == "да" or inp2 == "yes" or inp2 == "y":
     inp3 = int(inp3) - 1
     inp4 = input(prompt4)
     inp4 = int(inp4) - 1
+# inp5 = input(prompt5)
+inp5 = "нет"
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # file paths
@@ -156,6 +166,7 @@ df_pivot = df_pivot[[
     "Время поднятия кормушки",
     "Дата и время посадки/выбытия"
     ]]
+#
 """
 # df_pivot["Живок голов"] = df_pivot["Живок голов"].astype(float)
 df_pivot["Живок вес"] = df_pivot["Живок вес"].astype(float)
@@ -185,6 +196,28 @@ print(df_pivot)
             rowtostartin_pd = 0,
             coltostartin_pd = 0,
         )
+
+# запись в накопительный отчет напрямую
+if inp5 == "да" or inp5 == "yes" or inp5 == "y":
+    with console.status("Идет запись df_pivot в накопительный отчет...", spinner="bouncingBall"):
+        функции.df_to_excel_openpyxl(
+                filename = filename3,
+                разновидность = "впк",
+                df_для_записи = df_pivot,
+                rowtostartin_pd = 1,
+                coltostartin_pd = 1,
+                всего_colnum_offset = 2,
+                неприказ_belowtablenames_offset = 0,
+                приказ_belowtablenames_offset = 0,
+                clearing_marker = "не удалять",
+                clearing_marker_col = 2,
+                clearing_offset = 1,
+                remove_borders = 0,
+                change_alignment = 0,
+                add_borders = 0,
+                aggr_row = 0,
+                font_change_scope = 0,
+            )
 
 # РЕАЛИЗАЦИЯ---------------------------------------------------------------------
 if inp1 == "да" or inp1 == "yes" or inp1 == "y":
@@ -673,39 +706,39 @@ if inp2 == "да" or inp2 == "yes" or inp2 == "y":
         # print(df_старка_part2)
 
         функции.df_to_excel_openpyxl(
-        filename = filename4,
-        разновидность = "ШПК",
-        df_для_записи = df_старка_part1,
-        rowtostartin_pd = inp4,
-        coltostartin_pd = 0,
-        всего_colnum_offset = 2,
-        неприказ_belowtablenames_offset = 0,
-        приказ_belowtablenames_offset = 0,
-        clearing_marker = "не удалять",
-        clearing_marker_col = 1,
-        clearing_offset = 1,
-        remove_borders = 0,
-        change_alignment = 0,
-        add_borders = 0,
-        aggr_row = 0,
-        font_change_scope = 0,
-    )
+            filename = filename4,
+            разновидность = "ШПК",
+            df_для_записи = df_старка_part1,
+            rowtostartin_pd = inp4,
+            coltostartin_pd = 0,
+            всего_colnum_offset = 2,
+            неприказ_belowtablenames_offset = 0,
+            приказ_belowtablenames_offset = 0,
+            clearing_marker = "не удалять",
+            clearing_marker_col = 1,
+            clearing_offset = 1,
+            remove_borders = 0,
+            change_alignment = 0,
+            add_borders = 0,
+            aggr_row = 0,
+            font_change_scope = 0,
+        )
         функции.df_to_excel_openpyxl(
-        filename = filename4,
-        разновидность = "ШПК",
-        df_для_записи = df_старка_part2,
-        rowtostartin_pd = inp4,
-        coltostartin_pd = 10,
-        всего_colnum_offset = 2,
-        неприказ_belowtablenames_offset = 0,
-        приказ_belowtablenames_offset = 0,
-        clearing_marker = "не удалять",
-        clearing_marker_col = 1,
-        clearing_offset = 1,
-        remove_borders = 0,
-        change_alignment = 0,
-        add_borders = 0,
-        aggr_row = 0,
-        font_change_scope = 0,
-    )
+            filename = filename4,
+            разновидность = "ШПК",
+            df_для_записи = df_старка_part2,
+            rowtostartin_pd = inp4,
+            coltostartin_pd = 10,
+            всего_colnum_offset = 2,
+            неприказ_belowtablenames_offset = 0,
+            приказ_belowtablenames_offset = 0,
+            clearing_marker = "не удалять",
+            clearing_marker_col = 1,
+            clearing_offset = 1,
+            remove_borders = 0,
+            change_alignment = 0,
+            add_borders = 0,
+            aggr_row = 0,
+            font_change_scope = 0,
+        )
         

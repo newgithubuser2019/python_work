@@ -538,7 +538,9 @@ df_бройлеры = функции.pd_movecol(
         place="After"
         )
 if inp6 == "да" or inp6 == "yes" or inp6 == "y":
-    df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["площ", "корп", "Живок голов", "Живок вес", "Падеж голов", "Падеж вес"])
+    # df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["площ", "корп", "Живок голов", "Живок вес", "Падеж голов", "Падеж вес"])
+    df_pivot = df_pivot.drop(["Живок вес"], axis = 1) # if not merging on "Живок вес", then drop that col from df_pivot
+    df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["площ", "корп", "Живок голов", "Падеж голов", "Падеж вес"])
     # df_pivot["keycol"] = df_pivot["площ"] + df_pivot["корп"].astype(str) + df_pivot["Живок голов"].astype(str) + df_pivot["Живок вес"].astype(str) + df_pivot["Падеж голов"].astype(str)+ df_pivot["Падеж вес"].astype(str)
     # df_бройлеры["keycol"] = df_бройлеры["площ"] + df_бройлеры["корп"].astype(str) + df_бройлеры["Живок голов"].astype(str) + df_бройлеры["Живок вес"].astype(str) + df_бройлеры["Падеж голов"].astype(str)+ df_бройлеры["Падеж вес"].astype(str)
     # df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["keycol"])
@@ -558,7 +560,7 @@ if inp6 == "да" or inp6 == "yes" or inp6 == "y":
     df_бройлеры["Падеж вес"] = pd.to_numeric(df_бройлеры["Падеж вес"], errors="coerce")
     #
     df_pivot["Живок голов"] = pd.to_numeric(df_pivot["Живок голов"], errors="coerce")
-    df_pivot["Живок вес"] = pd.to_numeric(df_pivot["Живок вес"], errors="coerce")
+    # df_pivot["Живок вес"] = pd.to_numeric(df_pivot["Живок вес"], errors="coerce") # if not merging on "Живок вес"
     df_pivot["Падеж голов"] = pd.to_numeric(df_pivot["Падеж голов"], errors="coerce")
     df_pivot["Падеж вес"] = pd.to_numeric(df_pivot["Падеж вес"], errors="coerce")
     функции.pd_toexcel(

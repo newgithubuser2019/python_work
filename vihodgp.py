@@ -372,17 +372,41 @@ for i in listoffiles:
     # print(осн_вес)
     # print("\nосн_гол")
     # print(осн_гол)
-    # print("\nосн_ср_вес")
-    # print(осн_ср_вес)
-    # switch_value
+    print("\nосн_ср_вес")
+    print(осн_ср_вес)
+    #
     switch_value = 0
+    """
     if осн_ср_вес < 2.2 or осн_ср_вес == 2.2:
         switch_value = decimal.Decimal("2.2")
     if осн_ср_вес > 2.3 or осн_ср_вес == 2.3:
         switch_value = decimal.Decimal("2.3")
     if осн_ср_вес > 2.2 and осн_ср_вес < 2.3:
         switch_value = осн_ср_вес.quantize(decimal.Decimal("0.0"))
+    """
+    if осн_ср_вес >= 2.3:
+        switch_value = decimal.Decimal("2.3")
+    if осн_ср_вес > 2.2 and осн_ср_вес < 2.3:
+        if (осн_ср_вес - decimal.Decimal("2.2")) < (decimal.Decimal("2.3") - осн_ср_вес):
+            switch_value = decimal.Decimal("2.2")
+        if (осн_ср_вес - decimal.Decimal("2.2")) > (decimal.Decimal("2.3") - осн_ср_вес):
+            switch_value = decimal.Decimal("2.3")
+        if (осн_ср_вес - decimal.Decimal("2.2")) == (decimal.Decimal("2.3") - осн_ср_вес):
+            switch_value = осн_ср_вес.quantize(decimal.Decimal("0.0"))
+    if осн_ср_вес == 2.2:
+        switch_value = decimal.Decimal("2.2")
+    if осн_ср_вес > 1.75 and осн_ср_вес < 2.2:
+        if (осн_ср_вес - decimal.Decimal("1.75")) < (decimal.Decimal("2.2") - осн_ср_вес):
+            switch_value = decimal.Decimal("1.75")
+        if (осн_ср_вес - decimal.Decimal("1.75")) > (decimal.Decimal("2.2") - осн_ср_вес):
+            switch_value = decimal.Decimal("2.2")
+        if (осн_ср_вес - decimal.Decimal("1.75")) == (decimal.Decimal("2.2") - осн_ср_вес):
+            switch_value = осн_ср_вес.quantize(decimal.Decimal("0.0"))
+    if осн_ср_вес <= 1.75:
+        switch_value = decimal.Decimal("1.75")
     # exit()
+    print("\nswitch_value")
+    print(switch_value)
 
     # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # создаем отчет

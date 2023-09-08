@@ -101,6 +101,11 @@ df_from_excel = df_from_excel.dropna(subset=["Время поднятия кор
 #
 df_from_excel.reset_index(inplace = True)
 df_from_excel = df_from_excel.drop(["index"], axis = 1)
+# df_from_excel = df_from_excel.loc[df_from_excel["Корпус"].str.contains("Рождественская")]
+# df_from_excel = df_from_excel.loc[df_from_excel["Корпус"].str.contains("14")]
+# print("\ndf_from_excel")
+# print(df_from_excel)
+# exit()
 df_from_excel.loc[df_from_excel["Корпус"].str.contains(" пл."), ["площ"]] = df_from_excel["Корпус"]
 df_from_excel.loc[df_from_excel["площ"].str.contains("Агрин"), ["площ"]] = "Агрин"
 df_from_excel.loc[df_from_excel["площ"].str.contains("Коренская"), ["площ"]] = "Коренское"
@@ -122,21 +127,26 @@ df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["к
 df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
 #
 df_from_excel = df_from_excel.drop(["Корпус"], axis = 1)
-print("\ndf_from_excel")
-print(df_from_excel)
+# df_from_excel["pivot_index"] = df_from_excel["Дата и время посадки/выбытия"]+df_from_excel["площ"]+df_from_excel["корп"].astype(str)+df_from_excel["Время поднятия кормушки"]+df_from_excel["Головы"].astype(str)+df_from_excel["Вес, кг"].astype(str)
+# print("\ndf_from_excel")
+# print(df_from_excel)
+# exit()
 #
 df_pivot = pd.pivot_table(
     df_from_excel,
     # index=["Дата и время посадки/выбытия", "площ", "Вид выбытия",  "корп", "Время поднятия кормушки"],
     index=["Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки"],
+    # index=["pivot_index", "Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки"],
     columns=["Причина движения"],
     # values=["Головы"],
     values=["Головы", "Вес, кг"],
-    # aggfunc="mean",
+    # aggfunc="sum",
+    aggfunc=lambda x: list(x),
     fill_value=0,
     )
 df_pivot.columns = ['_'.join(col) for col in df_pivot.columns.values]
 df_pivot.reset_index(inplace = True)
+# df_pivot = df_pivot.drop(["pivot_index"], axis = 1)
 df_pivot = df_pivot.rename(columns={
     "Головы_Внешняя реализация": "Р-ция голов",
     "Головы_На мясо": "На мясо голов",
@@ -155,8 +165,14 @@ try:
     df_pivot = df_pivot.drop(["На мясо вес"], axis = 1)
 except KeyError:
     pass
+df_pivot = df_pivot.explode(["Падеж вес", "Живок вес", "Падеж голов", "Живок голов"])
+df_pivot.reset_index(inplace = True)
+df_pivot = df_pivot.drop(["index"], axis = 1)
 df_pivot["Живок голов"] = df_pivot["Живок голов"] + df_pivot["Падеж голов"]
 df_pivot["Живок вес"] = df_pivot["Живок вес"] + df_pivot["Падеж вес"]
+# print("\ndf_pivot")
+# print(df_pivot)
+# exit()
 df_pivot["Дата и время посадки/выбытия"] = pd.to_datetime(df_pivot["Дата и время посадки/выбытия"], dayfirst=True)
 df_pivot["Время поднятия кормушки"] = pd.to_datetime(df_pivot["Время поднятия кормушки"], dayfirst=True)
 df_pivot = df_pivot.sort_values(by=["Дата и время посадки/выбытия", "площ"], ascending=True)

@@ -396,12 +396,15 @@ for i in listoffiles:
     if осн_ср_вес == 2.2:
         switch_value = decimal.Decimal("2.2")
     if осн_ср_вес > 1.75 and осн_ср_вес < 2.2:
+        """
         if (осн_ср_вес - decimal.Decimal("1.75")) < (decimal.Decimal("2.2") - осн_ср_вес):
             switch_value = decimal.Decimal("1.75")
         if (осн_ср_вес - decimal.Decimal("1.75")) > (decimal.Decimal("2.2") - осн_ср_вес):
             switch_value = decimal.Decimal("2.2")
         if (осн_ср_вес - decimal.Decimal("1.75")) == (decimal.Decimal("2.2") - осн_ср_вес):
             switch_value = осн_ср_вес.quantize(decimal.Decimal("0.0"))
+        """
+        switch_value = "ср"
     if осн_ср_вес <= 1.75:
         switch_value = decimal.Decimal("1.75")
     # exit()

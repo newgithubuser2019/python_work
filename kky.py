@@ -188,16 +188,6 @@ df_pivot = df_pivot[[
     ]]
 #
 if inp6 == "да" or inp6 == "yes" or inp6 == "y":
-    """
-    # df_pivot["Живок голов"] = df_pivot["Живок голов"].astype(float)
-    df_pivot["Живок вес"] = df_pivot["Живок вес"].astype(float)
-    # df_pivot["Падеж голов"] = df_pivot["Падеж голов"].astype(float)
-    df_pivot["Падеж вес"] = df_pivot["Падеж вес"].astype(float)
-    df_pivot["Живок голов"] = pd.to_numeric(df_pivot["Живок голов"], errors="coerce")
-    df_pivot["Живок вес"] = pd.to_numeric(df_pivot["Живок вес"], errors="coerce")
-    df_pivot["Падеж голов"] = pd.to_numeric(df_pivot["Падеж голов"], errors="coerce")
-    df_pivot["Падеж вес"] = pd.to_numeric(df_pivot["Падеж вес"], errors="coerce")
-    """
     df_pivot["Живок голов"] = df_pivot["Живок голов"].apply(lambda x: decimal.Decimal(x))
     df_pivot["Живок голов"] = df_pivot["Живок голов"].apply(lambda x: x.quantize(decimal.Decimal("0.0")))
     df_pivot["Живок вес"] = df_pivot["Живок вес"].apply(lambda x: decimal.Decimal(x))
@@ -209,7 +199,13 @@ if inp6 == "да" or inp6 == "yes" or inp6 == "y":
 print("\ndf_pivot")
 print(df_pivot)
 # exit()
-if inp6 != "да" or inp6 != "yes" or inp6 != "y":
+# if inp6 != "да" or inp6 != "yes" or inp6 != "y":
+if not os.listdir(path_кку):
+    df_pivot["Живок голов"] = pd.to_numeric(df_pivot["Живок голов"], errors="coerce")
+    df_pivot["Живок вес"] = pd.to_numeric(df_pivot["Живок вес"], errors="coerce")
+    df_pivot["Падеж голов"] = pd.to_numeric(df_pivot["Падеж голов"], errors="coerce")
+    df_pivot["Падеж вес"] = pd.to_numeric(df_pivot["Падеж вес"], errors="coerce")
+    #
     функции.pd_toexcel(
                 pd,
                 #
@@ -220,6 +216,9 @@ if inp6 != "да" or inp6 != "yes" or inp6 != "y":
                 rowtostartin_pd = 0,
                 coltostartin_pd = 0,
             )
+    функции.print_line("hyphens")
+    print("\nПАПКА ККУ ПУСТАЯ!!!!!!!!!!!!!!!!!!!!!!!!")
+    exit()
 
 # запись в накопительный отчет напрямую
 if inp5 == "да" or inp5 == "yes" or inp5 == "y":
@@ -555,16 +554,8 @@ df_бройлеры = функции.pd_movecol(
         )
 if inp6 == "да" or inp6 == "yes" or inp6 == "y":
     df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["площ", "корп", "Живок голов", "Живок вес", "Падеж голов", "Падеж вес"])
-    # df_pivot = df_pivot.drop(["Живок вес"], axis = 1) # if not merging on "Живок вес", then drop that col from df_pivot
-    # df_pivot = df_pivot.drop(["Дата и время посадки/выбытия"], axis = 1)
-    # df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["площ", "корп", "Живок голов", "Падеж голов", "Падеж вес"])
     df_бройлеры["Живок вес"] = df_бройлеры["Живок вес"] - df_бройлеры["жкт"]
     df_бройлеры = df_бройлеры.drop(["жкт"], axis = 1)
-    # df_pivot["keycol"] = df_pivot["площ"] + df_pivot["корп"].astype(str) + df_pivot["Живок голов"].astype(str) + df_pivot["Живок вес"].astype(str) + df_pivot["Падеж голов"].astype(str)+ df_pivot["Падеж вес"].astype(str)
-    # df_бройлеры["keycol"] = df_бройлеры["площ"] + df_бройлеры["корп"].astype(str) + df_бройлеры["Живок голов"].astype(str) + df_бройлеры["Живок вес"].astype(str) + df_бройлеры["Падеж голов"].astype(str)+ df_бройлеры["Падеж вес"].astype(str)
-    # df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["keycol"])
-    # df_бройлеры = df_бройлеры.drop(["keycol"], axis = 1)
-    #
     df_бройлеры["без_корма"] = df_бройлеры["прибытие"] - df_бройлеры["Время поднятия кормушки"]
     df_бройлеры = функции.pd_movecol(
         df_бройлеры,
@@ -572,14 +563,13 @@ if inp6 == "да" or inp6 == "yes" or inp6 == "y":
         ref_col="выгрузка",
         place="After"
         )
-    #
     df_бройлеры["Живок голов"] = pd.to_numeric(df_бройлеры["Живок голов"], errors="coerce")
     df_бройлеры["Живок вес"] = pd.to_numeric(df_бройлеры["Живок вес"], errors="coerce")
     df_бройлеры["Падеж голов"] = pd.to_numeric(df_бройлеры["Падеж голов"], errors="coerce")
     df_бройлеры["Падеж вес"] = pd.to_numeric(df_бройлеры["Падеж вес"], errors="coerce")
     #
     df_pivot["Живок голов"] = pd.to_numeric(df_pivot["Живок голов"], errors="coerce")
-    # df_pivot["Живок вес"] = pd.to_numeric(df_pivot["Живок вес"], errors="coerce") # if not merging on "Живок вес"
+    df_pivot["Живок вес"] = pd.to_numeric(df_pivot["Живок вес"], errors="coerce")
     df_pivot["Падеж голов"] = pd.to_numeric(df_pivot["Падеж голов"], errors="coerce")
     df_pivot["Падеж вес"] = pd.to_numeric(df_pivot["Падеж вес"], errors="coerce")
     функции.pd_toexcel(

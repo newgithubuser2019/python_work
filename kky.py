@@ -191,11 +191,11 @@ if inp6 == "да" or inp6 == "yes" or inp6 == "y":
     df_pivot["Живок голов"] = df_pivot["Живок голов"].apply(lambda x: decimal.Decimal(x))
     df_pivot["Живок голов"] = df_pivot["Живок голов"].apply(lambda x: x.quantize(decimal.Decimal("0.0")))
     df_pivot["Живок вес"] = df_pivot["Живок вес"].apply(lambda x: decimal.Decimal(x))
-    df_pivot["Живок вес"] = df_pivot["Живок вес"].apply(lambda x: x.quantize(decimal.Decimal("0.00")))
+    df_pivot["Живок вес"] = df_pivot["Живок вес"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
     df_pivot["Падеж голов"] = df_pivot["Падеж голов"].apply(lambda x: decimal.Decimal(x))
     df_pivot["Падеж голов"] = df_pivot["Падеж голов"].apply(lambda x: x.quantize(decimal.Decimal("0.0")))
     df_pivot["Падеж вес"] = df_pivot["Падеж вес"].apply(lambda x: decimal.Decimal(x))
-    df_pivot["Падеж вес"] = df_pivot["Падеж вес"].apply(lambda x: x.quantize(decimal.Decimal("0.00")))
+    df_pivot["Падеж вес"] = df_pivot["Падеж вес"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
 print("\ndf_pivot")
 print(df_pivot)
 # exit()
@@ -454,11 +454,11 @@ for i in listoffiles_кку:
         df_from_excel["Живок голов"] = df_from_excel["Живок голов"].apply(lambda x: decimal.Decimal(x))
         df_from_excel["Живок голов"] = df_from_excel["Живок голов"].apply(lambda x: x.quantize(decimal.Decimal("0.0")))
         df_from_excel["Живок вес"] = df_from_excel["Живок вес"].apply(lambda x: decimal.Decimal(x))
-        df_from_excel["Живок вес"] = df_from_excel["Живок вес"].apply(lambda x: x.quantize(decimal.Decimal("0.00")))
+        df_from_excel["Живок вес"] = df_from_excel["Живок вес"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
         df_from_excel["Падеж голов"] = df_from_excel["Падеж голов"].apply(lambda x: decimal.Decimal(x))
         df_from_excel["Падеж голов"] = df_from_excel["Падеж голов"].apply(lambda x: x.quantize(decimal.Decimal("0.0")))
         df_from_excel["Падеж вес"] = df_from_excel["Падеж вес"].apply(lambda x: decimal.Decimal(x))
-        df_from_excel["Падеж вес"] = df_from_excel["Падеж вес"].apply(lambda x: x.quantize(decimal.Decimal("0.00")))
+        df_from_excel["Падеж вес"] = df_from_excel["Падеж вес"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
     df_from_excel["площ"] = df_from_excel["площ"].astype(str)
     #
     # print("\ndf_from_excel")
@@ -470,7 +470,7 @@ for i in listoffiles_кку:
     df_from_excel["жкт"] = df_from_excel["жкт"].fillna(0)
     if inp6 == "да" or inp6 == "yes" or inp6 == "y":
         df_from_excel["жкт"] = df_from_excel["жкт"].apply(lambda x: decimal.Decimal(x))
-        df_from_excel["жкт"] = df_from_excel["жкт"].apply(lambda x: x.quantize(decimal.Decimal("0.00")))
+        df_from_excel["жкт"] = df_from_excel["жкт"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
     # df_from_excel["Живок вес"] = df_from_excel["Живок вес"] - df_from_excel["жкт"]
     # df_from_excel = df_from_excel.drop(["жкт"], axis = 1)
     #
@@ -717,6 +717,8 @@ df_старка.loc[df_старка["старка"].str.contains("Истобня
 df_старка.loc[df_старка["старка"].str.contains("Истобнянская РС 2"), ["старка"]] = "Истобнянская (РС 2)"
 df_старка.loc[df_старка["старка"].str.contains("Истобнянская РС 3"), ["старка"]] = "Истобнянская (РС 3)"
 df_старка.loc[df_старка["старка"].str.contains("Истобнянская РС 4"), ["старка"]] = "Истобнянская (РС 4)"
+df_старка.loc[df_старка["старка"].str.contains("Истобнянская РС 5"), ["старка"]] = "Истобнянская (РС 5)"
+df_старка.loc[df_старка["старка"].str.contains("Истобнянская РС 6"), ["старка"]] = "Истобнянская (РС 6)"
 df_старка.loc[df_старка["старка"].str.contains("Муромская РМ 4"), ["старка"]] = "Муромская (РМ 4)"
 df_старка.loc[df_старка["старка"].str.contains("Муромская РМ 5"), ["старка"]] = "Муромская (РМ 5)"
 df_старка.loc[df_старка["старка"].str.contains("Муромская РМ 7"), ["старка"]] = "Муромская (РМ 7)"
@@ -735,6 +737,11 @@ df_старка.loc[df_старка["старка"].str.contains("Разумен
 df_старка.loc[df_старка["старка"].str.contains("Тихая сосна РМ"), ["старка"]] = "Тихая сосна (РМ)"
 df_старка.loc[df_старка["старка"].str.contains("Тихая сосна РС 1"), ["старка"]] = "Тихая сосна (РС 1)"
 df_старка.loc[df_старка["старка"].str.contains("Тихая сосна РС 2"), ["старка"]] = "Тихая сосна (РС 2)"
+#
+df_старка["Живок голов"] = pd.to_numeric(df_старка["Живок голов"], errors="coerce")
+df_старка["Живок вес"] = pd.to_numeric(df_старка["Живок вес"], errors="coerce")
+df_старка["Падеж голов"] = pd.to_numeric(df_старка["Падеж голов"], errors="coerce")
+df_старка["Падеж вес"] = pd.to_numeric(df_старка["Падеж вес"], errors="coerce")
 #
 
 if df_старка.empty == True:
@@ -757,12 +764,12 @@ if inp2 == "нет" or inp2 == "no" or inp2 == "n":
 if inp2 == "да" or inp2 == "yes" or inp2 == "y":
     if df_старка.empty == False:
         df_старка_part1 = df_старка.copy(deep=True)
-        df_старка_part1 = df_старка_part1.drop(["Падеж голов", "Падеж голов"], axis = 1)
+        df_старка_part1 = df_старка_part1.drop(["Падеж голов", "Падеж вес"], axis = 1)
         # print("\ndf_старка_part1")
         # print(df_старка_part1)
 
         df_старка_part2 = df_старка.copy(deep=True)
-        df_старка_part2 = df_старка_part2[["Падеж голов", "Падеж голов"]]
+        df_старка_part2 = df_старка_part2[["Падеж голов", "Падеж вес"]]
         # print("\ndf_старка_part2")
         # print(df_старка_part2)
 

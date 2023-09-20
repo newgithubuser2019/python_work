@@ -471,8 +471,8 @@ for i in listoffiles_кку:
     if inp6 == "да" or inp6 == "yes" or inp6 == "y":
         df_from_excel["жкт"] = df_from_excel["жкт"].apply(lambda x: decimal.Decimal(x))
         df_from_excel["жкт"] = df_from_excel["жкт"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
-    # df_from_excel["Живок вес"] = df_from_excel["Живок вес"] - df_from_excel["жкт"]
-    # df_from_excel = df_from_excel.drop(["жкт"], axis = 1)
+    df_from_excel["Живок вес"] = df_from_excel["Живок вес"] - df_from_excel["жкт"]
+    df_from_excel = df_from_excel.drop(["жкт"], axis = 1)
     #
     df_from_excel.loc[df_from_excel["площ"].str.contains("Коренская"), ["площ"]] = "Коренское"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Графовская"), ["площ"]] = "Графовское"
@@ -554,8 +554,8 @@ df_бройлеры = функции.pd_movecol(
         )
 if inp6 == "да" or inp6 == "yes" or inp6 == "y":
     df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["площ", "корп", "Живок голов", "Живок вес", "Падеж голов", "Падеж вес"])
-    df_бройлеры["Живок вес"] = df_бройлеры["Живок вес"] - df_бройлеры["жкт"]
-    df_бройлеры = df_бройлеры.drop(["жкт"], axis = 1)
+    # df_бройлеры["Живок вес"] = df_бройлеры["Живок вес"] - df_бройлеры["жкт"]
+    # df_бройлеры = df_бройлеры.drop(["жкт"], axis = 1)
     df_бройлеры["без_корма"] = df_бройлеры["прибытие"] - df_бройлеры["Время поднятия кормушки"]
     df_бройлеры = функции.pd_movecol(
         df_бройлеры,

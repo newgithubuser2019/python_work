@@ -88,9 +88,12 @@ for i in listoffiles:
         )
     df_from_excel.reset_index(inplace = True)
     df_from_excel = df_from_excel.rename(columns={"Unnamed: 2": "назв", "Готовая продукция, кг": "вес"})
-    df_from_excel["index"] = df_from_excel["index"].fillna(method="ffill")
+    # df_from_excel["index"] = df_from_excel["index"].fillna(method="ffill") # deprecated
+    df_from_excel["index"] = df_from_excel["index"].ffill()
+    df_from_excel["тип"] = None
     df_from_excel.loc[pd.isna(df_from_excel["назв"]), ["тип"]] = df_from_excel["index"]
-    df_from_excel["тип"] = df_from_excel["тип"].fillna(method="ffill")
+    # df_from_excel["тип"] = df_from_excel["тип"].fillna(method="ffill") # deprecated
+    df_from_excel["тип"] = df_from_excel["тип"].ffill()
     df_from_excel = df_from_excel.dropna(subset=["назв"])
     df_from_excel = функции.pd_movecol(
         df_from_excel,
@@ -114,7 +117,8 @@ for i in listoffiles:
     df_осн = df_осн.drop(["тип"], axis = 1)
     df_осн["кур"] = ""
     df_осн.loc[(df_осн["назв"].str.contains("Кур", case=False)==True) & (df_осн["назв"].str.contains("ЦБ")==False), ["кур"]] = df_осн["вес"]
-    df_осн.loc[(df_осн["назв"].str.contains("Кур", case=False)==True) & (df_осн["назв"].str.contains("ЦБ")==False), ["вес"]] = ""
+    df_осн.loc[(df_осн["назв"].str.contains("Кур", case=False)==True) & (df_осн["назв"].str.contains("ЦБ")==False), ["вес"]] = None
+    # exit()
     print("\ndf_осн")
     print(df_осн)
 

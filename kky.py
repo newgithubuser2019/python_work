@@ -106,6 +106,7 @@ df_from_excel = df_from_excel.drop(["index"], axis = 1)
 # print("\ndf_from_excel")
 # print(df_from_excel)
 # exit()
+df_from_excel["площ"] = None
 df_from_excel.loc[df_from_excel["Корпус"].str.contains(" пл."), ["площ"]] = df_from_excel["Корпус"]
 df_from_excel.loc[df_from_excel["площ"].str.contains("Агрин"), ["площ"]] = "Агрин"
 df_from_excel.loc[df_from_excel["площ"].str.contains("Коренская"), ["площ"]] = "Коренское"
@@ -117,6 +118,7 @@ df_from_excel.loc[df_from_excel["площ"].str.contains("Нежегольска
 df_from_excel.loc[df_from_excel["площ"].str.contains("Валуйская"), ["площ"]] = "Валуйское"
 df_from_excel.loc[df_from_excel["площ"].str.contains("Рождественская"), ["площ"]] = "Рождественское"
 #
+df_from_excel["корп"] = None
 df_from_excel.loc[df_from_excel["Корпус"].str.contains("корпус"), ["корп"]] = df_from_excel["Корпус"].str[0:3]
 df_from_excel.loc[df_from_excel["корп"].str.contains(" к", na=False), ["корп"]] = df_from_excel["корп"].str[0:2]
 df_from_excel["корп"] = "_" + df_from_excel["корп"].astype(str) + "_"
@@ -348,7 +350,8 @@ df_динамика["корп"] = df_динамика["корп"].apply(lambda x
 df_динамика["Дата посадки"] = pd.to_numeric(df_динамика["Дата посадки"], errors="coerce")
 df_динамика["Дата посадки"] = pd.to_datetime(df_динамика["Дата посадки"], dayfirst=True, unit="D", origin="1899-12-30")
 df_динамика.loc[df_динамика["№ корпуса"].apply(lambda x: x not in ["Агрин", "Графовское", "Коренское", "Муромское", "Нежегольское", "Полянское", "Томаровское", "Валуйское", "Рождественское"]), ["№ корпуса"]] = np.nan
-df_динамика["№ корпуса"] = df_динамика["№ корпуса"].fillna(method="ffill")
+# df_динамика["№ корпуса"] = df_динамика["№ корпуса"].fillna(method="ffill") # deprecated
+df_динамика["№ корпуса"] = df_динамика["№ корпуса"].ffill()
 df_динамика = df_динамика.rename(columns={"№ корпуса": "площ"})
 df_динамика = df_динамика.dropna(subset=["Дата посадки"])
 # print("\ndf_динамика")
@@ -400,10 +403,10 @@ for i in listoffiles_кку:
         "Выгрузка окончание (по счетчику)": "выгрузка",
         "Содержимое зобов и ЖКТ, кг": "жкт",
         })
-    df_from_excel["площ"] = np.nan
-    df_from_excel["сдача"] = np.nan
-    df_from_excel["корп"] = np.nan
-    df_from_excel["старка"] = np.nan
+    df_from_excel["площ"] = None # changed from np.nan
+    df_from_excel["сдача"] = None # changed from np.nan
+    df_from_excel["корп"] = None # changed from np.nan
+    df_from_excel["старка"] = None # changed from np.nan
     df_from_excel["нед"] = weeknum
     df_from_excel["дата.сдачи"] = датасдачи
     df_from_excel = функции.pd_movecol(
@@ -415,23 +418,27 @@ for i in listoffiles_кку:
     df_from_excel["index"] = df_from_excel["index"].fillna("XXX")
     #
     # df_from_excel.loc[df_from_excel["index"].str.contains("СтБр"), ["площ"]] = df_from_excel["index"].map(lambda x: x.rstrip(" СтБр"))
-    df_from_excel.loc[df_from_excel["index"].apply(lambda x: x in OP_list), ["площ"]] = df_from_excel["index"]
+    df_from_excel.loc[df_from_excel["index"].map(lambda x: x in OP_list), ["площ"]] = df_from_excel["index"]
     df_from_excel.loc[(df_from_excel["index"].str.contains("РС")==True) & (df_from_excel["index"].str.contains("корпус")==False), ["площ"]] = df_from_excel["index"]
     df_from_excel.loc[(df_from_excel["index"].str.contains("РМ")) & (df_from_excel["index"].str.contains("корпус")==False), ["площ"]] = df_from_excel["index"]
-    df_from_excel["площ"] = df_from_excel["площ"].fillna(method="ffill")
+    # df_from_excel["площ"] = df_from_excel["площ"].fillna(method="ffill") # deprecated
+    df_from_excel["площ"] = df_from_excel["площ"].ffill()
     #
     df_from_excel.loc[df_from_excel["index"].str.contains("Основная"), ["сдача"]] = "Основная"
     df_from_excel.loc[df_from_excel["index"].str.contains("Разрежение"), ["сдача"]] = "Разрежение"
-    df_from_excel["сдача"] = df_from_excel["сдача"].fillna(method="ffill")
+    # df_from_excel["сдача"] = df_from_excel["сдача"].fillna(method="ffill") # deprecated
+    df_from_excel["сдача"] = df_from_excel["сдача"].ffill()
     #
     df_from_excel.loc[df_from_excel["index"].str.contains("корпус"), ["корп"]] = df_from_excel["index"].str[0:3]
     df_from_excel.loc[df_from_excel["корп"].str.contains(" к", na=False), ["корп"]] = df_from_excel["корп"].str[0:2]
-    df_from_excel["корп"] = df_from_excel["корп"].fillna(method="ffill")
+    # df_from_excel["корп"] = df_from_excel["корп"].fillna(method="ffill") # deprecated
+    df_from_excel["корп"] = df_from_excel["корп"].ffill()
     df_from_excel["корп"] = df_from_excel["корп"].fillna("XXX")
     #
     df_from_excel.loc[(df_from_excel["площ"].str.contains("РС")==False) & (df_from_excel["площ"].str.contains("РМ")==False), ["старка"]] = "нет"
     df_from_excel.loc[(df_from_excel["площ"].str.contains("РС")==True) | (df_from_excel["площ"].str.contains("РМ")==True), ["старка"]] = df_from_excel["площ"]
-    df_from_excel["старка"] = df_from_excel["старка"].fillna(method="ffill")
+    # df_from_excel["старка"] = df_from_excel["старка"].fillna(method="ffill") # deprecated
+    df_from_excel["старка"] = df_from_excel["старка"].ffill()
     df_from_excel["старка"] = df_from_excel["старка"].fillna("нет")
     #
     df_from_excel = df_from_excel.dropna(subset=["выгрузка"])

@@ -1,6 +1,9 @@
 # -------------------------------------------------------------------IMPORTS
-import openpyxl
 import pprint
+import sys
+
+import openpyxl
+
 
 # -------------------------------------------------------------------FUNCTIONS
 def print_line(line_type):
@@ -70,7 +73,7 @@ def rawdata_pererabotka(квартал, USERPROFILE, inp0, inp1, inp2, inp2a, in
         # print(rowmax-1-21+1)
         if (rowmax-1-21+1) != val1*4:
             print("\nsomeone is missing in t-13")
-            exit()
+            sys.exit()
         print("\nDone processing raw data t-13 for " + x1)
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # t-51b
@@ -101,7 +104,7 @@ def rawdata_pererabotka(квартал, USERPROFILE, inp0, inp1, inp2, inp2a, in
         # print(rowmax-1-19+1)
         if (rowmax-1-19+1) != val1:
             print("\nsomeone is missing in t-51")
-            exit()
+            sys.exit()
         print("\nDone processing raw data t-51 for " + x1)
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -169,7 +172,7 @@ def rawdata_za_tur(l3, USERPROFILE, inp0, inp1, inp2, inp7, inp3d, inp3e, openpy
         if (rowmax-1-21+1) != val1*4:
             print("\nsomeone is missing in t-13")
             print(filename1a)
-            exit()
+            sys.exit()
         print("\nDone processing raw data t-13 for " + x1)
 
         """
@@ -255,7 +258,7 @@ def rawdata_za_tur(l3, USERPROFILE, inp0, inp1, inp2, inp7, inp3d, inp3e, openpy
             if (rowmax-1-21+1) != val1*4:
                 print("\nsomeone is missing in t-13")
                 print(filename11a)
-                exit()
+                sys.exit()
 
         # loading wb9
         wb9 = openpyxl.load_workbook(filename12b)
@@ -306,7 +309,7 @@ def rawdata_za_tur(l3, USERPROFILE, inp0, inp1, inp2, inp7, inp3d, inp3e, openpy
         if (rowmax-1-21+1) != val1*4:
             print("\nsomeone is missing in t-13")
             print(filename11b)
-            exit()
+            sys.exit()
         print("\nDone processing raw data t-13 for " + x1)
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # t-51
@@ -356,7 +359,7 @@ def rawdata_za_tur(l3, USERPROFILE, inp0, inp1, inp2, inp7, inp3d, inp3e, openpy
             if (rowmax-1-19+1) != val1:
                 print("\nsomeone is missing in t-51")
                 print(filename4a)
-                exit()
+                sys.exit()
         
         # loading wb4
         wb4 = openpyxl.load_workbook(filename4b)
@@ -372,7 +375,7 @@ def rawdata_za_tur(l3, USERPROFILE, inp0, inp1, inp2, inp7, inp3d, inp3e, openpy
         if (rowmax-1-19+1) != val1:
             print("\nsomeone is missing in t-51")
             print(filename4b)
-            exit()
+            sys.exit()
         
         print("\nDone processing raw data t-51 for " + x1)
         """
@@ -433,7 +436,7 @@ def pd_toexcel(
             print("File \"" + filename + "\" appears to be open. Please close the file and try again")
             print_line("exclamation_marks")
             print("\n")
-            exit()
+            sys.exit()
         break
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -450,7 +453,7 @@ def wb_save_openpyxl(
             print("File \"" + filename + "\" appears to be open. Please close the file and try again")
             print_line("exclamation_marks")
             print("\n")
-            exit()
+            sys.exit()
         break
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -484,7 +487,7 @@ def writing_openpyxl(
         except IndexError:
             break
         break
-    # exit()
+    # sys.exit()
 
     # SAVING CHANGES-----------------------------------------------------------------------------------------------------------------------------------------------------
     wb_save_openpyxl(wb, filename)
@@ -607,7 +610,7 @@ def df_to_excel_openpyxl(
         celldict_new.setdefault(cellcoord, cellval)
     # print("celldict_new")
     # pprint.pprint(celldict_new)
-    # exit()
+    # sys.exit()
     celldict = celldict_new
 
     # WORKING WITH DESTINATION FILE---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -636,7 +639,7 @@ def df_to_excel_openpyxl(
         if clearing_marker == "удалить все":
             endrowforclearing = rowmax + 1
             # print(endrowforclearing)
-            # exit()
+            # sys.exit()
         op_tuple = tuple(ws[startcellLetter_op + str(rowtostartin_pd + 1):endcellLetter_op + str(endrowforclearing)])
         for rowsofcells in op_tuple:
             for cellsinrows in rowsofcells:
@@ -806,7 +809,7 @@ def rawdata_po_itogam(inp0, inp1, inp2, inp3, inp4, openpyxl, USERPROFILE):
     if (rowmax-1-19+1) != val1:
         print("\nsomeone is missing in t-51")
         print(filename11)
-        exit()
+        sys.exit()
     """
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # t-13
     # loading wb9
@@ -829,7 +832,7 @@ def rawdata_po_itogam(inp0, inp1, inp2, inp3, inp4, openpyxl, USERPROFILE):
         print("\nRow " + str(rowmax - 7) + " is empty")
         print("rowmax = " + str(rowmax))
         # print(str(ws.dimensions))
-        exit()
+        sys.exit()
     
     ws.delete_rows(rowmax - 5, 50)
     for i in range(1, rowmax):
@@ -858,7 +861,7 @@ def rawdata_po_itogam(inp0, inp1, inp2, inp3, inp4, openpyxl, USERPROFILE):
     # print(rowmax-1-21+1)
     if (rowmax-1-21+1) != номер*4:
         print("\nsomeone is missing in t-13")
-        exit()
+        sys.exit()
     # print("\nDone processing raw data t-13")
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
 
@@ -1028,7 +1031,7 @@ def rawdata_budget(площадка_loop, USERPROFILE, inp0, inp1, inp2, openpyx
             if (rowmax-1-19+1) != val1:
                 print("\nsomeone is missing in t-51")
                 print(filename11)
-                exit()
+                sys.exit()
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -1073,7 +1076,7 @@ def rawdata_plr(inp0, inp1, inp2, inp3, inp4, openpyxl, USERPROFILE):
     if (rowmax-1-19+1) != val1:
         print("\nsomeone is missing in t-51")
         print(filename11)
-        exit()
+        sys.exit()
     """
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # t-13
     # loading wb9
@@ -1096,7 +1099,7 @@ def rawdata_plr(inp0, inp1, inp2, inp3, inp4, openpyxl, USERPROFILE):
         print("\nRow " + str(rowmax - 7) + " is empty")
         print("rowmax = " + str(rowmax))
         # print(str(ws.dimensions))
-        exit()
+        sys.exit()
     
     ws.delete_rows(rowmax - 5, 50)
     for i in range(1, rowmax):
@@ -1126,7 +1129,7 @@ def rawdata_plr(inp0, inp1, inp2, inp3, inp4, openpyxl, USERPROFILE):
     # print(rowmax-1-21+1)
     if (rowmax-1-21+1) != номер*4:
         print("\nsomeone is missing in t-13")
-        exit()
+        sys.exit()
     # print("\nDone processing raw data t-13")
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1496,7 +1499,7 @@ def БФС_подразделения(dataframe_list):
                 # print(i)
                 pass
             break
-        # exit()
+        # sys.exit()
         # 
         list1 = df_from_excel[df_from_excel["должность"]=="Отдел главного энергетика"].index.values
         for i in list1:
@@ -1604,7 +1607,7 @@ def БФС_подразделения(dataframe_list):
         df_from_excel = df_from_excel.drop(["результ"], axis = 1)
         df_from_excel = df_from_excel.drop(["текуч_1С"], axis = 1)
         print(df_from_excel)
-        exit()
+        sys.exit()
         """
         # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
         df_from_excel["ОП"] = df_from_excel["ОП"].fillna(method="ffill")
@@ -1699,7 +1702,7 @@ def БФС_подразделения(dataframe_list):
         df_from_excel["ОП"] = df_from_excel["подразд"] + ", " + df_from_excel["ОП"]
         # print("\ndf_from_excel")
         # print(df_from_excel)
-        # exit()
+        # sys.exit()
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
 
 
@@ -1771,7 +1774,7 @@ def za_tur_dataframe_exceptions(dataframe_list, inputs_list, inputs_list_excepti
                 # 
                 df12 = df12[df12["drop_flag"].map(lambda x: str(x)!="remove")]
                 # print(df12)
-                # exit()
+                # sys.exit()
                 df12.reset_index(inplace = True)
                 df12 = df12.drop(["index"], axis = 1)
                 df12 = df12.drop(["месяц"], axis = 1)

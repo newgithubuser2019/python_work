@@ -1,30 +1,30 @@
 # PREPARATION
-import os
 import datetime
-import re
-import pprint
-import shutil
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font, colors
-import json
 import decimal
+import json
+import os
+import pprint
+import re
+import shutil
+import sys
 from decimal import Decimal
+from functools import reduce
+
+import openpyxl
 import pandas as pd
 import sidetable
-from functools import reduce
+from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
+                             Side, colors)
+from openpyxl.utils import column_index_from_string, get_column_letter
+
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 16)
 pd.set_option("expand_frame_repr", True)
-from функции import print_line
-from функции import rawdata_za_tur
-from функции import pd_movecol
-from функции import pd_toexcel
-from функции import pd_readexcel
-from функции import writing_to_excel_openpyxl
-from функции import json_dump_n_load
-from функции import za_tur_dataframe_exceptions
+from функции import (json_dump_n_load, pd_movecol, pd_readexcel, pd_toexcel,
+                     print_line, rawdata_za_tur, writing_to_excel_openpyxl,
+                     za_tur_dataframe_exceptions)
+
 # from функции import json_dump_n_load_2
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables
@@ -341,7 +341,7 @@ while True:
                     sostoyanie = ws.cell(row = i, column = 8).value
                     if doljnost in сц_на_нн_руководители_должн:
                         print(doljnost + "---" + fullname + "---" + sostoyanie)
-                # exit()    
+                # sys.exit()    
         # 
         inp12 = input(prompt12)
         if inp12 not in продолж:
@@ -600,7 +600,7 @@ while True:
         if inputs_list == inputs_list_exceptions_dict[1]:
             filename4 = USERPROFILE + "\\Documents\\Работа\\" + inp0 + "\\" + inp1 + "\\" + inp2 + "\\" + inp7 + "\\" + inp3d + "-" + inp3e + "\\исходные данные\\должности" + ".xlsx"
         # print(filename4)
-        # exit()
+        # sys.exit()
         filename5a = USERPROFILE + "\\Documents\\Работа\\" + inp0 + "\\" + inp1 + "\\" + inp2 + "\\" + inp7 + "\\" + inp3d + "-" + inp3e + "\\промежуточный_файл_1.xlsx"
         filename5b = USERPROFILE + "\\Documents\\Работа\\" + inp0 + "\\" + inp1 + "\\" + inp2 + "\\" + inp7 + "\\" + inp3d + "-" + inp3e + "\\промежуточный_файл_2.xlsx"
         filename5c = USERPROFILE + "\\Documents\\Работа\\" + inp0 + "\\" + inp1 + "\\" + inp2 + "\\" + inp7 + "\\" + inp3d + "-" + inp3e + "\\промежуточный_файл_3.xlsx"
@@ -743,7 +743,7 @@ while True:
                 приказ_belowtablenames_offset = 0,
             )
 
-            exit()
+            sys.exit()
         # ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         if inp2 == "сц на нн":
@@ -2086,7 +2086,7 @@ while True:
                                 # dict_name_2 = {k: "integer"},
                                 # тип = "single",
                             )
-                    # exit()
+                    # sys.exit()
                 if norma_from_viplacheno_round1 < норма_дн_числ:
                     # не знаю может ли быть такое и что бы это могло значить
                     print(k + " norma_from_viplacheno_round1 < норма_дн_числ")
@@ -2438,7 +2438,7 @@ while True:
                                         # dict_name_2 = {k: "integer"},
                                         # тип = "single",
                                     )
-                            # exit()
+                            # sys.exit()
                         if norma_from_viplacheno_round1 < норма_дн_числ:
                             # не знаю может ли быть такое и что бы это могло значить
                             print(k + " norma_from_viplacheno_round1 < норма_дн_числ")
@@ -2458,7 +2458,7 @@ while True:
                                     # dict_name_2 = {k: "integer"},
                                     # тип = "single",
                                 )
-                            # exit()
+                            # sys.exit()
                 if spisok_rdni[k] < норма_дн_числ:
                     # print(k)
                     if k in tabnum_viplacheno:
@@ -3025,7 +3025,7 @@ while True:
         if inp2 == "выращивание":
             if inputs_list == inputs_list_exceptions_dict[33]:
                 # print("hello")
-                # exit()
+                # sys.exit()
                 df12["месяц"] = x1
                 df12["drop_flag"] = "keep"
                 # 
@@ -3038,7 +3038,7 @@ while True:
                 df12 = df12.drop(["drop_flag"], axis = 1)
             if inputs_list == inputs_list_exceptions_dict[29]:
                 # print("hello")
-                # exit()
+                # sys.exit()
                 df12["месяц"] = x1
                 df12["drop_flag"] = "keep"
                 # 
@@ -3053,7 +3053,7 @@ while True:
                 df12 = df12.drop(["drop_flag"], axis = 1)
             if inputs_list == inputs_list_exceptions_dict[28]:
                 # print("hello")
-                # exit()
+                # sys.exit()
                 df12["месяц"] = x1
                 df12["drop_flag"] = "keep"
                 # 
@@ -3069,7 +3069,7 @@ while True:
                 df12 = df12.drop(["drop_flag"], axis = 1)
             if inputs_list == inputs_list_exceptions_dict[24]:
                 # print("hello")
-                # exit()
+                # sys.exit()
                 df12["месяц"] = x1
                 df12["drop_flag"] = "keep"
                 # 
@@ -3380,7 +3380,7 @@ while True:
         # pd.set_option("max_colwidth", 10)
         print("\ndf12")
         print(df12)
-        # exit()
+        # sys.exit()
 
         # writing dataframe to wb
         """
@@ -3587,7 +3587,7 @@ while True:
         # if inp11 == продолж[0] or inp11 == продолж[2] or inp11 == продолж[4]:
             # break
         if inp11 == продолж[1] or inp11 == продолж[3] or inp11 == продолж[5]:
-            exit()
+            sys.exit()
     except ValueError:
             continue
     break

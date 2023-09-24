@@ -6,6 +6,7 @@ import os
 import pprint
 import re
 import shutil
+import sys
 from functools import reduce
 
 import numpy as np
@@ -72,7 +73,7 @@ df_from_excel = pd.read_excel(
 df_from_excel = df_from_excel.loc[(df_from_excel["Вид выбытия"].str.contains("Основная")) | (df_from_excel["Вид выбытия"].str.contains("Разрежение"))]
 df_from_excel = df_from_excel.dropna(subset=["Время поднятия кормушки"])
 # print(df_from_excel.head())
-# exit()
+# sys.exit()
 #
 df_from_excel.reset_index(inplace = True)
 df_from_excel = df_from_excel.drop(["index"], axis = 1)
@@ -146,7 +147,7 @@ df_pivot = df_pivot[[
     ]]
 print("\ndf_pivot")
 print(df_pivot)
-# exit()
+# sys.exit()
 функции.pd_toexcel(
             pd,
             #

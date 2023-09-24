@@ -3,6 +3,7 @@ import datetime
 import decimal
 import os
 import re
+import sys
 # import shutil
 import time
 
@@ -97,7 +98,7 @@ df_from_excel = pd.read_excel(
 df_from_excel = df_from_excel.loc[(df_from_excel["Вид выбытия"].str.contains("Основная")) | (df_from_excel["Вид выбытия"].str.contains("Разрежение"))]
 df_from_excel = df_from_excel.dropna(subset=["Время поднятия кормушки"])
 # print(df_from_excel.head())
-# exit()
+# sys.exit()
 #
 df_from_excel.reset_index(inplace = True)
 df_from_excel = df_from_excel.drop(["index"], axis = 1)
@@ -105,7 +106,7 @@ df_from_excel = df_from_excel.drop(["index"], axis = 1)
 # df_from_excel = df_from_excel.loc[df_from_excel["Корпус"].str.contains("14")]
 # print("\ndf_from_excel")
 # print(df_from_excel)
-# exit()
+# sys.exit()
 df_from_excel["площ"] = None
 df_from_excel.loc[df_from_excel["Корпус"].str.contains(" пл."), ["площ"]] = df_from_excel["Корпус"]
 df_from_excel.loc[df_from_excel["площ"].str.contains("Агрин"), ["площ"]] = "Агрин"
@@ -132,7 +133,7 @@ df_from_excel = df_from_excel.drop(["Корпус"], axis = 1)
 # df_from_excel["pivot_index"] = df_from_excel["Дата и время посадки/выбытия"]+df_from_excel["площ"]+df_from_excel["корп"].astype(str)+df_from_excel["Время поднятия кормушки"]+df_from_excel["Головы"].astype(str)+df_from_excel["Вес, кг"].astype(str)
 # print("\ndf_from_excel")
 # print(df_from_excel)
-# exit()
+# sys.exit()
 #
 df_pivot = pd.pivot_table(
     df_from_excel,
@@ -174,7 +175,7 @@ df_pivot["Живок голов"] = df_pivot["Живок голов"] + df_pivot
 df_pivot["Живок вес"] = df_pivot["Живок вес"] + df_pivot["Падеж вес"]
 # print("\ndf_pivot")
 # print(df_pivot)
-# exit()
+# sys.exit()
 df_pivot["Дата и время посадки/выбытия"] = pd.to_datetime(df_pivot["Дата и время посадки/выбытия"], dayfirst=True)
 df_pivot["Время поднятия кормушки"] = pd.to_datetime(df_pivot["Время поднятия кормушки"], dayfirst=True)
 df_pivot = df_pivot.sort_values(by=["Дата и время посадки/выбытия", "площ"], ascending=True)
@@ -200,7 +201,7 @@ if inp6 == "да" or inp6 == "yes" or inp6 == "y":
     df_pivot["Падеж вес"] = df_pivot["Падеж вес"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
 print("\ndf_pivot")
 print(df_pivot)
-# exit()
+# sys.exit()
 # if inp6 != "да" or inp6 != "yes" or inp6 != "y":
 if not os.listdir(path_кку):
     df_pivot["Живок голов"] = pd.to_numeric(df_pivot["Живок голов"], errors="coerce")
@@ -220,7 +221,7 @@ if not os.listdir(path_кку):
             )
     функции.print_line("hyphens")
     print("\nПАПКА ККУ ПУСТАЯ!!!!!!!!!!!!!!!!!!!!!!!!")
-    exit()
+    sys.exit()
 
 # запись в накопительный отчет напрямую
 if inp5 == "да" or inp5 == "yes" or inp5 == "y":
@@ -263,7 +264,7 @@ if inp1 == "да" or inp1 == "yes" or inp1 == "y":
     print(df_сп_51)
     inp0 = input("Продолжить?:")
     if inp0 == "нет":
-        exit()
+        sys.exit()
 
     # реализация---------------------------------------------------------------------
     for i in listoffiles_реализация:
@@ -327,7 +328,7 @@ if inp1 == "да" or inp1 == "yes" or inp1 == "y":
         print("\ndf_реализация")
         print(df_реализация)
         # print(df_реализация.dtypes)
-    # exit()
+    # sys.exit()
 
 # ДИНАМИКА РАЗВИТИЯ ПТИЦЫ---------------------------------------------------------------------
 df_динамика = pd.read_excel(
@@ -357,7 +358,7 @@ df_динамика = df_динамика.dropna(subset=["Дата посадк�
 # print("\ndf_динамика")
 # print(df_динамика)
 # print(df_динамика.dtypes)
-# exit()
+# sys.exit()
 
 # ККУ---------------------------------------------------------------------
 for i in listoffiles_кку:
@@ -373,7 +374,7 @@ for i in listoffiles_кку:
     print(датасдачи)
     today = datetime.datetime.strptime(датасдачи, "%d.%m.%Y")
     weeknum = datetime.datetime.date(today).isocalendar().week
-    # exit()
+    # sys.exit()
 
     # copying a row of colnames to be used as pandas header--------------------------
     wb = openpyxl.load_workbook(path_кку + i)
@@ -386,7 +387,7 @@ for i in listoffiles_кку:
         # target_cell = searchcell # this doesn"t work
         ws.cell(row = 9, column = b).value = searchcell # this is the correct way
     функции.wb_save_openpyxl(wb, path_кку + i)
-    # exit()
+    # sys.exit()
 
     # ---------------------------------------------------------------------
     df_from_excel = pd.read_excel(
@@ -470,7 +471,7 @@ for i in listoffiles_кку:
     #
     # print("\ndf_from_excel")
     # print(df_from_excel)
-    # exit()
+    # sys.exit()
     df_from_excel["жкт"] = df_from_excel["жкт"].fillna("")
     df_from_excel["жкт"] = df_from_excel["жкт"].str.replace(",",".")
     df_from_excel["жкт"] = pd.to_numeric(df_from_excel["жкт"], errors="coerce")
@@ -500,7 +501,7 @@ for i in listoffiles_кку:
     # print("\ndf_from_excel")
     # print(df_from_excel)
     # print(df_from_excel.dtypes)
-    # exit()
+    # sys.exit()
     df_from_excel = pd.merge(df_from_excel, df_динамика, how = "left", on = ["площ", "корп"])
     df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",","))
     # df_from_excel["корп"] = pd.to_numeric(df_from_excel["корп"], errors="ignore")
@@ -513,7 +514,7 @@ for i in listoffiles_кку:
         )
     print("\nЦБ")
     print(df_from_excel)
-    # exit()
+    # sys.exit()
 
     # findf-----------------------------------------------------------------------------------------------------------------------------------------------------------
     findf = pd.concat([findf, df_from_excel], ignore_index = True)
@@ -527,7 +528,7 @@ findf = findf.drop(["дата.сдачи.dt"], axis = 1)
 print("\nИТОГО")
 print(findf)
 # print(findf.dtypes)
-# exit()
+# sys.exit()
 
 
 # writing to excel-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -701,7 +702,7 @@ if inp2 == "да" or inp2 == "yes" or inp2 == "y":
     end = time.time()
     print("\nушло времени на запись в накопительный отчет напрямую")
     print(end - start)
-    # exit()
+    # sys.exit()
 
 # СТАРКА----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 df_старка = findf.copy(deep=True)

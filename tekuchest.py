@@ -1,18 +1,22 @@
 # PREPARATION PHASE
-import os
 import datetime
+import os
 # import re
 import pprint
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 # import decimal
 # from decimal import Decimal
-import numpy as np
-import pandas as pd
-from pandas.api.types import is_numeric_dtype
+import sys
 from functools import reduce
+
+import numpy as np
+import openpyxl
+import pandas as pd
 import sidetable
+from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
+                             Side)
+from openpyxl.utils import column_index_from_string, get_column_letter
+from pandas.api.types import is_numeric_dtype
+
 # import pyarrow as pa
 # import pyarrow.parquet as pq
 pd.set_option("display.max_rows", 1600)
@@ -20,11 +24,9 @@ pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 30)
 pd.set_option("expand_frame_repr", False)
 # from функции import rawdata_pererabotka
-from функции import pd_movecol
-from функции import print_line
-from функции import writing_to_excel_openpyxl
-from функции import pd_toexcel
-from функции import БФС_подразделения
+from функции import (БФС_подразделения, pd_movecol, pd_toexcel, print_line,
+                     writing_to_excel_openpyxl)
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables
 USERPROFILE = os.environ["USERPROFILE"]
@@ -221,7 +223,7 @@ if not tabnum_uchastok:
 # pprint.pprint(tabnum_надучасток)
 if not tabnum_надучасток:
     print("tabnum_надучасток is empty")
-# exit()
+# sys.exit()
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # PANDAS section
 df00 = pd.DataFrame(tabnum_spisok.items(), columns = ["tabnumfio", "остальные_данные"])
@@ -238,19 +240,19 @@ df00 = df00.drop(["график"], axis = 1)
 # df00 = df00.drop(["дата_уволн"], axis = 1)
 # print("\ndf00")
 # print(df00)
-# exit()
+# sys.exit()
 
 df01a = pd.DataFrame(tabnum_uchastok.items(), columns = ["tabnumfio", "uchastok"])
 df01a = df01a.fillna(method="ffill")
 print("\ndf01a")
 print(df01a)
-exit()
+sys.exit()
 
 df01b = pd.DataFrame(tabnum_надучасток.items(), columns = ["tabnumfio", "надучасток"])
 df01b = df01b.fillna(method="ffill")
 # print("\ndf01b")
 # print(df01b)
-# exit()
+# sys.exit()
 
 df01 = pd.merge(df01b, df01a, how = "left", on = "tabnumfio")
 df01["uchastok"] = df01["uchastok"].fillna("")
@@ -276,14 +278,14 @@ df01["Участок"] = df01["участок"] + ""
 df01 = df01.drop(["участок"], axis = 1)
 print("\ndf01")
 print(df01)
-exit()
+sys.exit()
 if df01.empty:
     print("df01 is empty")
 
 df02 = pd.merge(df00, df01, how = "left", on = "tabnumfio")
 print("\ndf02")
 print(df02)
-exit()
+sys.exit()
 """
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -341,7 +343,7 @@ df_from_excel_УП["дата_приёма"] = pd.to_datetime(df_from_excel_УП.
 df_from_excel_УП["дата_уволн"] = pd.to_datetime(df_from_excel_УП.дата_уволн, dayfirst=True)
 # print("\ndf_from_excel_УП")
 # print(df_from_excel_УП)
-# exit()
+# sys.exit()
 pd_toexcel(
         pd,
         # 
@@ -352,7 +354,7 @@ pd_toexcel(
         разновидность = "Лист1",
         header_pd = "True",
     )
-# exit()
+# sys.exit()
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ПРИНЯТО УВОЛЕНО - sidetable section
@@ -376,7 +378,7 @@ for i in ["ОП", "подразд", "подразд2"]:
         pd.set_option("max_colwidth", 50)
         print(df_sidetable_уволено)
         pd.set_option("max_colwidth", 25)
-    # exit()
+    # sys.exit()
 
     # принято
     df_for_sidetable = df_from_excel_УП[(df_from_excel_УП.дата_приёма > "2021-01-01") & (df_from_excel.дата_приёма < "2021-02-01")]
@@ -396,7 +398,7 @@ for i in ["ОП", "подразд", "подразд2"]:
         pd.set_option("max_colwidth", 50)
         print(df_sidetable_принято)
         pd.set_option("max_colwidth", 25)
-    # exit()
+    # sys.exit()
 
     # сводный
     if df_sidetable_уволено.empty == False:
@@ -445,7 +447,7 @@ for i in ["ОП", "подразд", "подразд2"]:
         pd.set_option("max_colwidth", 25)
     if df_total.empty:
         print("\ndf_total is empty")
-        exit()
+        sys.exit()
 
 """
 # запись в Excel
@@ -461,7 +463,7 @@ if df_total.empty == False:
         header_pd = "True",
     )
 """
-# exit()
+# sys.exit()
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ССЧ - loading from excel into dataframe
@@ -525,7 +527,7 @@ pd_toexcel(
         header_pd = "True",
     )
 """
-# exit()
+# sys.exit()
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ТЕКУЧЕСТЬ - merging dataframes
@@ -541,7 +543,7 @@ print_line("hyphens")
 print("\nТЕКУЧЕСТЬ")
 print(df_текучесть)
 df_текучесть = df_текучесть.drop(["текуч_1С"], axis = 1)
-# exit()
+# sys.exit()
 """
 # запись в Excel
 if df_total.empty == False:

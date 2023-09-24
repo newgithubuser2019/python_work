@@ -4,6 +4,7 @@ import decimal
 import os
 import re
 import shutil
+import sys
 
 import openpyxl
 import pandas as pd
@@ -76,7 +77,7 @@ for i in listoffiles:
         if searchcell == "Убой":
             header_pd = b
             print(str(header_pd))
-    # exit()
+    # sys.exit()
     #
     df_from_excel = pd.read_excel(
         path1 + i,
@@ -109,7 +110,7 @@ for i in listoffiles:
         )
     print("\ndf_from_excel")
     print(df_from_excel)
-    # exit()
+    # sys.exit()
     
     # ГП------------------------------------------------------------------------------------------------------------------
     df_осн = df_from_excel.copy(deep=True)
@@ -118,7 +119,7 @@ for i in listoffiles:
     df_осн["кур"] = ""
     df_осн.loc[(df_осн["назв"].str.contains("Кур", case=False)==True) & (df_осн["назв"].str.contains("ЦБ")==False), ["кур"]] = df_осн["вес"]
     df_осн.loc[(df_осн["назв"].str.contains("Кур", case=False)==True) & (df_осн["назв"].str.contains("ЦБ")==False), ["вес"]] = None
-    # exit()
+    # sys.exit()
     print("\ndf_осн")
     print(df_осн)
 
@@ -213,7 +214,7 @@ for i in listoffiles:
         # today = datetime.strptime(дата_акта, "%d.%m.%Y")
         дата_меньше = datetime.datetime.strptime(дата_акта_нач, "%Y.%m.%d")
         дата_больше = datetime.datetime.strptime(дата_акта_кон, "%Y.%m.%d")
-    # exit()
+    # sys.exit()
 
     # Накопительный отчет - бройлеры---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # with console.status("Working...", spinner="bouncingBall"):
@@ -245,7 +246,7 @@ for i in listoffiles:
     вес_сумма = df_цб["вес"].sum()
     print(вес_сумма)
     """
-    # exit()
+    # sys.exit()
 
     # Накопительный отчет - старка---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     """
@@ -297,13 +298,13 @@ for i in listoffiles:
         print(df_starka)
         # print(df_starka.head())
         #print(df_starka.dtypes)
-        # exit()
+        # sys.exit()
     if df_starka.empty == True:
         print("\nСТАРКИ НЕ БЫЛО")
         # print(df_starka)
         # print(df_starka.head())
         #print(df_starka.dtypes)
-        # exit()
+        # sys.exit()
     """
 
     # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -411,7 +412,7 @@ for i in listoffiles:
         switch_value = "ср"
     if осн_ср_вес <= 1.75:
         switch_value = decimal.Decimal("1.75")
-    # exit()
+    # sys.exit()
     print("\nswitch_value")
     print(switch_value)
 

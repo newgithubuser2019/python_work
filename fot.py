@@ -1,32 +1,39 @@
 # PREPARATION
+# import datetime
+# import decimal
+# import json
 import os
-import datetime
+# import pprint
+# import re
+# import shutil
+import sys
 from datetime import datetime
-import re
-import pprint
-import shutil
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font, colors
-import json
-import decimal
 from decimal import Decimal
-import pandas as pd
-import numpy as np
-import sidetable
 from functools import reduce
+
+import numpy as np
+import openpyxl
+import pandas as pd
+# import sidetable
+from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
+                             Side, colors)
+from openpyxl.utils import column_index_from_string, get_column_letter
 from pandas.tseries.offsets import DateOffset
+
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 15)
 pd.set_option("expand_frame_repr", False)
-from функции import print_line
-from функции import rawdata_budget
-from функции import pd_movecol
-from функции import pd_toexcel
-from функции import pd_readexcel
-from функции import writing_to_excel_openpyxl
-from функции import json_dump_n_load
+from функции import (
+        json_dump_n_load,
+        pd_movecol,
+        # pd_readexcel,
+        pd_toexcel,
+        print_line,
+        rawdata_budget,
+        # writing_to_excel_openpyx
+        )
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables
 USERPROFILE = os.environ["USERPROFILE"]
@@ -116,7 +123,7 @@ df_from_excel = pd_movecol(
         )
 print("df_from_excel")
 print(df_from_excel)
-# exit()
+# sys.exit()
 df_норма = df_from_excel.copy(deep=True)
 df_норма = df_норма.drop(df_норма[(df_норма["тип"] == "факт")].index)
 pd_toexcel(
@@ -150,7 +157,7 @@ df_from_excel = pd.read_excel(filename3, sheet_name="Лист1", index_col=None,
 # print("df_from_excel")
 # print(df_from_excel)
 # print(df_from_excel.dtypes)
-# exit()
+# sys.exit()
 df_from_excel = df_from_excel.drop(df_from_excel[(df_from_excel["должность"] == 0)].index)
 df_from_excel = df_from_excel.groupby(["тип", "площадка", "должность"], as_index=False).agg({"штат": "sum", "сумма": "sum", "поШРзн": "sum"})
 df_from_excel["1мес"] = df_from_excel["сумма"]/6
@@ -217,7 +224,7 @@ pd_toexcel(
 # reading from excel
 df_from_excel = pd.read_excel(filename5, sheet_name="Лист1", index_col=None, engine = "openpyxl", header=0, usecols = "A,B,C,D,H,I,J,K,AF")
 # print(df_from_excel.dtypes)
-# exit()
+# sys.exit()
 df_from_excel = pd_movecol(
         df_from_excel,
         cols_to_move=["поШРзн"],

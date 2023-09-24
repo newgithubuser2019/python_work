@@ -1,25 +1,29 @@
-# PREPARATION
+# IMPORTS
 import os
 from shutil import copyfile
 import json
+import sys
 import openpyxl
 from openpyxl.utils import get_column_letter, column_index_from_string
 from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 import pprint
+
 import pandas as pd
-import sidetable
+# import sidetable
 from pathlib import Path
 # import fuzzymatcher
 # import recordlinkage
+
+from функции import rawdata_po_itogam
+# from функции import pd_readexcel
+from функции import pd_movecol
+from функции import print_line
+# from функции import writing_to_excel_openpyxl
+
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 25)
 pd.set_option("expand_frame_repr", False)
-from функции import rawdata_po_itogam
-from функции import pd_readexcel
-from функции import pd_movecol
-from функции import print_line
-from функции import writing_to_excel_openpyxl
 
 # global variables
 для_D9 = ""
@@ -145,7 +149,7 @@ while True:
                 inp8 = input(prompt8)
                 if inp8 not in продолж:
                     print("\nНе удалось распознать ответ")
-                    # exit()
+                    # sys.exit()
                     continue
         except ValueError:
             continue
@@ -331,7 +335,7 @@ while True:
                         tabnum = ws.cell(row = i, column = 4).value
                         cellval = str(ws.cell(row = i, column = 3).value)
                         # print(cellval)
-                        # exit()
+                        # sys.exit()
                         if cellval != "" and cellval != "None":
                             # commapos = cellval.find(",")
                             commapos = cellval.find("\n")
@@ -340,7 +344,7 @@ while True:
                             # print(doljnost)
                             fio = cellval[:commapos]
                             # print(fio)
-                            # exit()
+                            # sys.exit()
                             # tabnumfio = tabnum + fio
                             # tabnumfio = tabnum + doljnost
                             tabnumfio = tabnum + "_" + doljnost
@@ -617,7 +621,7 @@ while True:
                     df_предст = df_предст[df_предст.премия != 1]
                     print("\ndf_предст")
                     print(df_предст)
-                    # exit()
+                    # sys.exit()
                     
 
                     # -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -652,7 +656,7 @@ while True:
                             except ValueError:
                                 print("something is wrong with т-51")
                                 print(i)
-                                exit()
+                                sys.exit()
                                 # oklad_int = 0
                                 # tabnumfio_oklad.setdefault(tabnumfio, oklad_int)
                             break
@@ -680,7 +684,7 @@ while True:
                             n_split = n.split("_")
                             print(n_split[0] + "_" + полноеимя_должность_dict[n][4] + "_" + n_split[1])
                     if len(оклад_missing)> 0:
-                        exit()
+                        sys.exit()
                 """ 
                 # ---------------------------------------------------------------------------------------------------------------------------------------------------
                 # loading wb6
@@ -699,7 +703,7 @@ while True:
                         if value1 == inp3:
                             число_дней = value2
                     print("\nчисло дней в ---- " + inp3 + " " + inp2 + " ---- = " + str(число_дней))
-                    # exit()
+                    # sys.exit()
 
                 # -----------------------------------------------------------------------------------------------------------------------------------------------------------
                 if inp6 == "фиксированный процент" or inp6 == "по показателям":
@@ -715,7 +719,7 @@ while True:
                     df_t13c.loc[df_t13c["явки"]>число_дней, ["явки"]] = число_дней
                     # print("\ndf_t13c")
                     # print(df_t13c)
-                    # exit()
+                    # sys.exit()
                     # 
                     df00 = pd.DataFrame(полноеимя_должность_dict.items(), columns = ["tabnumfio", "остальные_данные"])
                     # df00[["полное_имя", "должность", "тек_сост", "tabnum", "фио", "лишение"]] = pd.DataFrame(df00.остальные_данные.values.tolist(), index= df00.index)
@@ -759,13 +763,13 @@ while True:
                     df01a = df01a.fillna(method="ffill")
                     # print("\ndf01a")
                     # print(df01a)
-                    # exit()
+                    # sys.exit()
                     # 
                     df01b = pd.DataFrame(tabnum_надучасток.items(), columns = ["tabnumfio", "надучасток"])
                     df01b = df01b.fillna(method="ffill")
                     # print("\ndf01b")
                     # print(df01b)
-                    # exit()
+                    # sys.exit()
                     # 
                     df01 = pd.merge(df01b, df01a, how = "left", on = "tabnumfio")
                     if Z != "СПК" and Z != "СпВБ" and Z != "Ветеринарная Cлужба":
@@ -787,7 +791,7 @@ while True:
                         df01["участок"] = df01["участок"].str.rsplit(",").str[1]
                     # print("\ndf01")
                     # print(df01)
-                    # exit()
+                    # sys.exit()
                     # 
                     df02 = pd.DataFrame(tabnumfio_oklad.items(), columns = ["tabnumfio", "остальные_данные"])
                     df02[["фио", "должность", "оклад"]] = pd.DataFrame(df02.остальные_данные.values.tolist(), index= df02.index)
@@ -799,7 +803,7 @@ while True:
                     # df00 = pd.merge(df00, df01, how = "left", on = "tabnumfio")
                     # df00 = pd.merge(df00, df02, how = "left", on = "tabnumfio")
                     df00 = pd.merge(df00, df_t13c, how = "left", on = "tabnumfio")
-                    # exit()
+                    # sys.exit()
                     # 
                     df00 = df00.drop(["tabnumfio"], axis = 1)
                     df00 = df00.drop(["tabnum"], axis = 1)
@@ -871,7 +875,7 @@ while True:
                         place="After")
                 # print("\ndf00")
                 # print(df00)
-                # exit()
+                # sys.exit()
                 
                 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
                 if inp6 == "по показателям" and Z == "Администрация":
@@ -917,7 +921,7 @@ while True:
                     df00.reset_index(inplace = True)
                     print("\ndf00")
                     print(df00)
-                    # exit()
+                    # sys.exit()
                 
                 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
                 # record linking
@@ -937,7 +941,7 @@ while True:
                 matched_results.sort_values(by=["best_match_score"], ascending=False)
                 print("\nmatched_results")
                 print(matched_results)
-                exit()
+                sys.exit()
                 """
                 # 
                 # record linking toolkit
@@ -973,7 +977,7 @@ while True:
                 # final_merge = account_merge.merge(reimbursement_lookup, how="left")
                 final_merge = pd.merge(potential_matches, df_предст, how = "left", left_on = "level_0", right_on = index)
                 print(final_merge)
-                exit()
+                sys.exit()
                 """
                 
                 # -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1177,12 +1181,12 @@ while True:
                     df_from_excel = df_from_excel.dropna(subset=["%_премии"])
                     # print("\ndf_from_excel")
                     # print(df_from_excel)
-                    # exit()
+                    # sys.exit()
 
                     # df_меньше_100
                     df_меньше_100 = df_from_excel.copy(deep=True)
                     # print(df_меньше_100)
-                    # exit()
+                    # sys.exit()
                     df_меньше_100["flag"] = ""
                     """
                     if Z != "Ржавец" and Z != "Строитель" and Z != "СПК":
@@ -1319,7 +1323,7 @@ while True:
                             os.remove(filename10)
                         else:
                             print("\nCan not delete the file as it doesn"t exist")
-                    # exit()
+                    # sys.exit()
                     
                     """
                     if df_больше_100.empty == False:
@@ -1386,7 +1390,7 @@ while True:
     if inpX == "y" or inpX == "yes" or inpX == "да":
         continue
     if inpX == "n" or inpX == "no" or inpX == "нет":
-        exit()
+        sys.exit()
 
     # LOOP 3 ENDS HERE
     # ---------------------------------------------------------------------------------------------------------------------------------------------------------------

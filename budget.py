@@ -1,30 +1,30 @@
 # PREPARATION
-import os
 import datetime
-import re
-import pprint
-import shutil
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font, colors
-import json
 import decimal
+import json
+import os
+import pprint
+import re
+import shutil
+import sys
 from decimal import Decimal
+from functools import reduce
+
+import openpyxl
 import pandas as pd
 import sidetable
-from functools import reduce
+from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
+                             Side, colors)
+from openpyxl.utils import column_index_from_string, get_column_letter
 from pandas.tseries.offsets import DateOffset
+
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 15)
 pd.set_option("expand_frame_repr", False)
-from функции import print_line
-from функции import rawdata_budget
-from функции import pd_movecol
-from функции import pd_toexcel
-from функции import pd_readexcel
-from функции import writing_to_excel_openpyxl
-from функции import json_dump_n_load
+from функции import (json_dump_n_load, pd_movecol, pd_readexcel, pd_toexcel,
+                     print_line, rawdata_budget, writing_to_excel_openpyxl)
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables
 USERPROFILE = os.environ["USERPROFILE"]
@@ -195,7 +195,7 @@ for i in range(1, rowmax):
             # if категория not in должн_кат_dict[должность]:
                 # должн_кат_dict[должность].append(категория)
 # pprint.pprint(должн_кат_dict)
-# exit()
+# sys.exit()
 if not должн_кат_dict:
     print("должн_кат_dict is empty")
 """
@@ -220,7 +220,7 @@ df_from_excel.drop(df_from_excel.loc[df_from_excel["подразделение3"
 # df_from_excel = df_from_excel[["подразделение2", "подразделение3", "подразделение"]]
 print("\ndf_from_excel")
 print(df_from_excel)
-# exit()
+# sys.exit()
 df_from_excel_2 = df_from_excel.copy(deep=True)
 df_from_excel_2["подр4"] = df_from_excel_2["подразделение3"] + ""
 
@@ -381,11 +381,11 @@ while True:
                     # tabnum_uchastok[tabnumfio].append(надучасток)
                     # tabnum_uchastok[tabnumfio].append(uchastok)
         # pprint.pprint(надучасток_юбиляры)
-        # exit()
+        # sys.exit()
         if not надучасток_юбиляры:
             print("надучасток_юбиляры is empty")
         # pprint.pprint(участок_юбиляры)
-        # exit()
+        # sys.exit()
         if not участок_юбиляры:
             print("участок_юбиляры is empty")
             """
@@ -506,11 +506,11 @@ while True:
                     # tabnum_uchastok[tabnumfio].append(надучасток)
                     # tabnum_uchastok[tabnumfio].append(uchastok)
         # pprint.pprint(надучасток_юбиляры)
-        # exit()
+        # sys.exit()
         if not надучасток_юбиляры:
             print("надучасток_юбиляры is empty")
         # pprint.pprint(участок_юбиляры)
-        # exit()
+        # sys.exit()
         if not участок_юбиляры:
             print("участок_юбиляры is empty")
             """
@@ -664,7 +664,7 @@ while True:
                         print("something is wrong with т-51")
                         print(y1)
                         print(i)
-                        exit()
+                        sys.exit()
                         # oklad_int = 0
                         # tabnumfio_oklad.setdefault(tabnumfio, oklad_int)
                     break
@@ -797,7 +797,7 @@ while True:
                     print("something is wrong")
                     print(y1)
                     print(i)
-                    exit()
+                    sys.exit()
                 break
         # pprint.pprint(KPI_3_dict)
         if not KPI_3_dict:
@@ -827,7 +827,7 @@ while True:
             place="After")
         # print("\ndf01")
         # print(df01)
-        # exit()
+        # sys.exit()
 
         # df_from_excel["подразделение"] = df_from_excel["подразделение1"] + ", " + df_from_excel["подразделение2"] + ", " + df_from_excel["подразделение2"]
         df02 = pd.DataFrame(должность_оклад.items(), columns = ["подразд_долж", "оклад"])
@@ -890,17 +890,17 @@ while True:
         df08a = df08a.fillna(method="ffill")
         # print("\ndf08a")
         # print(df08a)
-        # exit()
+        # sys.exit()
         df08b = pd.DataFrame(участок_юбиляры.items(), columns = ["tabnumfio", "участок"])
         df08b = df08b.fillna(method="ffill")
         # print("\ndf08b")
         # print(df08b)
-        # exit()
+        # sys.exit()
         df08c = pd.DataFrame(должн_юбиляры.items(), columns = ["tabnumfio", "должность"])
         df08c = df08c.fillna(method="bfill")
         # print("\ndf08c")
         # print(df08c)
-        # exit()
+        # sys.exit()
         df08d = pd.merge(df08a, df08b, how = "left", on = "tabnumfio")
         df08d = pd.merge(df08d, df08c, how = "left", on = "tabnumfio")
         df08d["подразделение3"] = df08d["участок"]
@@ -920,25 +920,25 @@ while True:
         df00 = df00.explode("должность")
         # print("\ndf00")
         # print(df00)
-        # exit()
+        # sys.exit()
         # df00 = pd.merge(df00, df01, how = "left", on = "должность")
         # df00 = pd.merge(df00, df01,  how="left", left_on=["подразделение", "должность"], right_on = ["подразделение", "должность"])
         # print("\ndf00")
         # print(df00)
-        # exit()
+        # sys.exit()
         df00.reset_index(inplace = True)
         df00 = df00.drop(["index"], axis = 1)
         # df00.loc[df00["подразделение"].str.contains("Цех "), ["подразделение"]] = df00["подразделение1"] + ", " + df00["подразделение2"] + ", " + df00["подразделение2"]
         df00 = pd.merge(df00, df01,  how="left", left_on=["подразделение", "должность"], right_on = ["подразделение", "должность"])
         # print("\ndf00")
         # print(df00)
-        # exit()
+        # sys.exit()
         df00["подразделение"] = df00["подразделение1"] + ", " + df00["подразделение2"] + ", " + df00["подразделение2"]
         df00 = pd.merge(df00, df02,  how="left", left_on=["подразделение", "должность"], right_on = ["подразделение", "должность"])
         df00["подразделение"] = df00["подразделение1"] + ", " + df00["подразделение2"] + ", " + df00["подразделение3"]
         # print("\ndf00")
         # print(df00)
-        # exit()
+        # sys.exit()
         df00 = pd.merge(df00, df03,  how="left", left_on=["подразделение", "должность"], right_on = ["подразделение", "должность"])
         df00 = pd.merge(df00, df03b,  how="left", left_on=["подразделение", "должность"], right_on = ["подразделение", "должность"])
         df00 = pd.merge(df00, df04,  how="left", left_on=["подразделение", "должность"], right_on = ["подразделение", "должность"])
@@ -947,7 +947,7 @@ while True:
         df00 = pd.merge(df00, df07, how = "left", on = "должность")
         # print("\ndf00")
         # print(df00)
-        # exit()
+        # sys.exit()
         if x1 == "Истобнянская":
             df00.loc[df00["должность"].str.contains("Медицинская сестра"), ["оклад"]] = 6065
         if x1 == "Муромская":
@@ -1884,7 +1884,7 @@ pd_toexcel(
             разновидность = "Лист1",
             header_pd = "True",
         )
-# exit()
+# sys.exit()
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # СДЕЛЬНАЯ ЗП - выращивание
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1977,7 +1977,7 @@ for k, v in площадки_корпуса_поголовье.items():
     df_from_excel["тех.оп"] = "Деловая молодка(выращив)"
     # print("\ndf_from_excel")
     # print(df_from_excel)
-    # exit()
+    # sys.exit()
     # 
     # print("\ndf_from_excel")
     # print(df_from_excel)
@@ -2120,7 +2120,7 @@ for k, v in площадки_корпуса_я.items():
     df_from_excel["тех.оп"] = "Деловая молодка(доращив)"
     # print("\ndf_from_excel")
     # print(df_from_excel)
-    # exit()
+    # sys.exit()
     # 
     # print("\ndf_from_excel")
     # print(df_from_excel)
@@ -2638,7 +2638,7 @@ for k, v in площадки_корпуса_я.items():
     # df_from_excel["тех.оп"] = "Деловая молодка(доращив)"
     # print("\ndf_from_excel")
     # print(df_from_excel)
-    # exit()
+    # sys.exit()
     # 
     df_from_excel["должн"] = "Оператор птицефабрик и механизированных ферм"
     df_from_excel = df_from_excel.append(df_from_excel, ignore_index = True)

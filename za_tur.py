@@ -5,14 +5,18 @@ import functools
 import json
 import os
 import pprint
-# import re
-# import shutil
+import sys
 
 # import openpyxl
 import pandas as pd
-# import sidetable
 
 import функции
+
+# import re
+# import shutil
+
+# import sidetable
+
 
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
@@ -283,7 +287,7 @@ while True:
     break
 функции.print_line("hyphens")
 # LOOP 1 ENDS HERE
-# exit()
+# sys.exit()
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # LOOP 2
 # LOOP 2 ENDS HERE
@@ -376,7 +380,7 @@ while True:
         print(норма_муж)
         норма_жен = workdays_num*7.2 - СРД_часы
         print(норма_жен)
-        # exit()
+        # sys.exit()
         # -------------------------------------------------------------------------------------------------------------------------------------------------------------------
         # -----------------------------------------------------------СПИСОК
         # creating tabnum_spisok_общий
@@ -429,7 +433,7 @@ while True:
 
         print("\ndf_from_excel")
         print(df_from_excel)
-        # exit()
+        # sys.exit()
 
         # -------------------------------------------------------------------------------------------------------------------------------------------------------------------
         # -----------------------------------------------------------Т-13 RAW (УДАЛЕНИЕ НЕНУЖНЫХ СТРОК)
@@ -483,7 +487,7 @@ while True:
             if (rowmax-1-21+1) != val1*4:
                 print("\nsomeone is missing in t-13")
                 print(filename2a)
-                exit()
+                sys.exit()
             print("\nDone processing raw data t-13 for " + x1)
         
         # ----------------------------------------------------------------------------------------------------------------------
@@ -531,7 +535,7 @@ while True:
         id_должность = id_должность.drop(["id"], axis = 1)
         print("id_должность")
         print(id_должность)
-        # exit()
+        # sys.exit()
         # -----------------------------------------------------------creating tabnum_всего_явки_дни
         """
         for i in range(21, rowmax, 4):
@@ -894,7 +898,7 @@ while True:
         print("\ndf_т13")
         print(df_т13)
 
-        exit()
+        sys.exit()
 
         df_fin = pd.merge(df_from_excel, df_т13, how = "left", on = ["Сотрудник", "таб_ном"])
         df_fin = df_fin.fillna("НЕТ ДАННЫХ")
@@ -912,7 +916,7 @@ while True:
             rowtostartin_pd = 0,
             coltostartin_pd = 0,
         )
-        exit()
+        sys.exit()
 
         #
         #
@@ -1827,7 +1831,7 @@ while True:
                                 # dict_name_2 = {k: "integer"},
                                 # тип = "single",
                             )
-                    # exit()
+                    # sys.exit()
                 if norma_from_viplacheno_round1 < норма_дн_числ:
                     # не знаю может ли быть такое и что бы это могло значить
                     print(k + " norma_from_viplacheno_round1 < норма_дн_числ")
@@ -2179,7 +2183,7 @@ while True:
                                         # dict_name_2 = {k: "integer"},
                                         # тип = "single",
                                     )
-                            # exit()
+                            # sys.exit()
                         if norma_from_viplacheno_round1 < норма_дн_числ:
                             # не знаю может ли быть такое и что бы это могло значить
                             print(k + " norma_from_viplacheno_round1 < норма_дн_числ")
@@ -2199,7 +2203,7 @@ while True:
                                     # dict_name_2 = {k: "integer"},
                                     # тип = "single",
                                 )
-                            # exit()
+                            # sys.exit()
                 if spisok_rdni[k] < норма_дн_числ:
                     # print(k)
                     if k in tabnum_viplacheno:
@@ -2766,7 +2770,7 @@ while True:
         if inp2 == "выращивание":
             if inputs_list == inputs_list_exceptions_dict[33]:
                 # print("hello")
-                # exit()
+                # sys.exit()
                 df12["месяц"] = x1
                 df12["drop_flag"] = "keep"
                 # 
@@ -2779,7 +2783,7 @@ while True:
                 df12 = df12.drop(["drop_flag"], axis = 1)
             if inputs_list == inputs_list_exceptions_dict[29]:
                 # print("hello")
-                # exit()
+                # sys.exit()
                 df12["месяц"] = x1
                 df12["drop_flag"] = "keep"
                 # 
@@ -2794,7 +2798,7 @@ while True:
                 df12 = df12.drop(["drop_flag"], axis = 1)
             if inputs_list == inputs_list_exceptions_dict[28]:
                 # print("hello")
-                # exit()
+                # sys.exit()
                 df12["месяц"] = x1
                 df12["drop_flag"] = "keep"
                 # 
@@ -2810,7 +2814,7 @@ while True:
                 df12 = df12.drop(["drop_flag"], axis = 1)
             if inputs_list == inputs_list_exceptions_dict[24]:
                 # print("hello")
-                # exit()
+                # sys.exit()
                 df12["месяц"] = x1
                 df12["drop_flag"] = "keep"
                 # 
@@ -3121,7 +3125,7 @@ while True:
         # pd.set_option("max_colwidth", 10)
         print("\ndf12")
         print(df12)
-        # exit()
+        # sys.exit()
 
         # writing dataframe to wb
         """
@@ -3328,7 +3332,7 @@ while True:
         # if inp11 == продолж[0] or inp11 == продолж[2] or inp11 == продолж[4]:
             # break
         if inp11 == продолж[1] or inp11 == продолж[3] or inp11 == продолж[5]:
-            exit()
+            sys.exit()
     except ValueError:
             continue
     break

@@ -1,25 +1,25 @@
 # PREPARATION
-import os
+import datetime
 import json
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
+import os
 import pprint
+import sys
+from pathlib import Path
+
+import openpyxl
 import pandas as pd
 import sidetable
-from pathlib import Path
-import datetime
+from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
+                             Side)
+from openpyxl.utils import column_index_from_string, get_column_letter
+
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 30)
 pd.set_option("expand_frame_repr", True)
 # import numpy as np
-from функции import print_line
-from функции import pd_readexcel
-from функции import pd_toexcel
-from функции import pd_movecol
-from функции import writing_to_excel_openpyxl
-from функции import rawdata_plr
+from функции import (pd_movecol, pd_readexcel, pd_toexcel, print_line,
+                     rawdata_plr, writing_to_excel_openpyxl)
 
 # global variables
 USERPROFILE = os.environ["USERPROFILE"]
@@ -249,7 +249,7 @@ while True:
     df_from_excel.reset_index(inplace = True)
     # df_from_excel["ФИО"] = df_from_excel["ФИО"].fillna(method="ffill")
     # print(df_from_excel.dtypes)
-    # exit()
+    # sys.exit()
     df_from_excel["часы_отраб"] = df_from_excel["часы_отраб"].str.replace(",",".")
     df_from_excel["часы_отраб"] = pd.to_numeric(df_from_excel["часы_отраб"], errors="coerce")
     # df_from_excel["сумма"] = df_from_excel["сумма"].str.replace(" ","")
@@ -286,7 +286,7 @@ while True:
     print_line("hyphens")
     print("\ndf_from_excel ИСХОДНЫЙ")
     print(df_from_excel)
-    # exit()
+    # sys.exit()
     # 
     """
     df_from_excel_left = df_from_excel.groupby(["ФИО"], as_index=False)["должность"].apply("__".join).reset_index()
@@ -317,7 +317,7 @@ while True:
     print("\ndf_from_excel КОНЕЧНЫЙ")
     print(df_from_excel)
     """
-    # exit()
+    # sys.exit()
     # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
     # loading wb2
     wb = openpyxl.load_workbook(filename2)
@@ -374,7 +374,7 @@ while True:
     # pprint.pprint(spisok_dict)
     if not spisok_dict:
         print("spisok_dict is empty")
-    # exit()
+    # sys.exit()
     """
     for k, v in spisok_dict.items():
         if "Ковтун" in k:
@@ -407,7 +407,7 @@ while True:
                     if ". ." in fio_str:
                         fio = fio_str[:-2]
                         # print(fio)
-                        # exit()
+                        # sys.exit()
                     tabnumfio = tabnum + fio
                     # oklad_dict.setdefault(tabnum, oklad_int)
                     oklad_dict.setdefault(tabnumfio, oklad_int)
@@ -541,7 +541,7 @@ while True:
     # pprint.pprint(перемещения_dict)
     if not перемещения_dict:
         print("перемещения_dict is empty")
-    # exit()
+    # sys.exit()
 
     # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
     # PANDAS SECTION
@@ -841,7 +841,7 @@ while True:
         # print(df_from_excel)
         df_перемещения = pd.merge(df04, df_from_excel, how = "left", on = "ФИО")
         # print(df_перемещения)
-        # exit()
+        # sys.exit()
         df_перемещения = df_перемещения.drop(["tabnum"], axis = 1)
         df_перемещения = df_перемещения.dropna(subset=["ПпР"])
         df_перемещения = pd_movecol(
@@ -886,7 +886,7 @@ while True:
     if inpX == "y" or inpX == "yes" or inpX == "да":
         continue
     if inpX == "n" or inpX == "no" or inpX == "нет":
-        exit()
+        sys.exit()
     """
     # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
     break

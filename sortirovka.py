@@ -1,19 +1,21 @@
 # PREPARATION
-import os
 import json
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
+import os
 import pprint
+import sys
+
+import openpyxl
 import pandas as pd
 import sidetable
+from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
+                             Side)
+from openpyxl.utils import column_index_from_string, get_column_letter
+
 # pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 25)
 pd.set_option("expand_frame_repr", False)
-from функции import pd_movecol
-from функции import print_line
-from функции import writing_to_excel_openpyxl
+from функции import pd_movecol, print_line, writing_to_excel_openpyxl
 
 # global variables
 USERPROFILE = os.environ["USERPROFILE"]

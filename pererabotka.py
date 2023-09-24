@@ -1,27 +1,30 @@
 # PREPARATION PHASE
-import os
 import datetime
-import re
-import pprint
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 import decimal
+import os
+import pprint
+import re
+import sys
 from decimal import Decimal
-import pandas as pd
-from pandas.api.types import is_numeric_dtype
 from functools import reduce
-import sidetable
+
+import openpyxl
+import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
+import sidetable
+from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
+                             Side)
+from openpyxl.utils import column_index_from_string, get_column_letter
+from pandas.api.types import is_numeric_dtype
+
 pd.set_option("display.max_rows", 1600)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 25)
 pd.set_option("expand_frame_repr", False)
-from функции import rawdata_pererabotka
-from функции import pd_movecol
-from функции import print_line
-from функции import writing_to_excel_openpyxl
+from функции import (pd_movecol, print_line, rawdata_pererabotka,
+                     writing_to_excel_openpyxl)
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables
 USERPROFILE = os.environ["USERPROFILE"]
@@ -358,7 +361,7 @@ while True:
             # pprint.pprint(tabnum_надучасток)
             if not tabnum_надучасток:
                 print("tabnum_надучасток is empty")
-            # exit()
+            # sys.exit()
 
             # creating vrednost_spisok dict
             for k in fullname_vrednost.keys():
@@ -636,7 +639,7 @@ while True:
             # pprint.pprint(tabnum_oklad_fin)
             if not tabnum_oklad_fin:
                 print("tabnum_oklad_fin is empty")
-            # exit()
+            # sys.exit()
             # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
             
             # loading wb0
@@ -718,11 +721,11 @@ while True:
                     new_workdays_num = 0
                     new_СРД_часы = 0
             # pprint.pprint(tabnum_norma)
-            # exit()
+            # sys.exit()
             if not tabnum_norma:
                 print("tabnum_norma is empty")
             # pprint.pprint(tabnum_norma_длячтс)
-            # exit()
+            # sys.exit()
             if not tabnum_norma_длячтс:
                 print("tabnum_norma_длячтс is empty")
 
@@ -732,7 +735,7 @@ while True:
                         if k1 in k2:
                             tabnum_pererabotka_промежут.setdefault(k1, v1 - v2)
             # pprint.pprint(tabnum_pererabotka_промежут)
-            # exit()
+            # sys.exit()
             if not tabnum_pererabotka_промежут:
                 print("tabnum_pererabotka_промежут is empty")
 
@@ -742,7 +745,7 @@ while True:
                     if k1 == k2:
                         tabnum_pererabotka.setdefault(k1, v1 + v2)
             # pprint.pprint(tabnum_pererabotka)
-            # exit()
+            # sys.exit()
             if not tabnum_pererabotka:
                 print("tabnum_pererabotka is empty")
             
@@ -791,13 +794,13 @@ while True:
             df01a = df01a.fillna(method="ffill")
             # print("\ndf01a")
             # print(df01a)
-            # exit()
+            # sys.exit()
             
             df01b = pd.DataFrame(tabnum_надучасток.items(), columns = ["tabnumfio", "надучасток"])
             df01b = df01b.fillna(method="ffill")
             # print("\ndf01b")
             # print(df01b)
-            # exit()
+            # sys.exit()
             
             df01 = pd.merge(df01b, df01a, how = "left", on = "tabnumfio")
             df01["uchastok"] = df01["uchastok"].fillna("")
@@ -818,30 +821,30 @@ while True:
             df01 = df01.drop(["участок"], axis = 1)
             # print("\ndf01")
             # print(df01)
-            # exit()
+            # sys.exit()
             if df01.empty:
                 print("df01 is empty")
 
             df00a = pd.DataFrame(tabnum_polnimya.items(), columns = ["tabnumfio", "Полное_Имя"])
             # print("\ndf00a")
             # print(df00a)
-            # exit()
+            # sys.exit()
 
             df00b = pd.DataFrame(tabnum_должность.items(), columns = ["tabnumfio", "Должность"])
             # print("\ndf00b")
             # print(df00b)
-            # exit()
+            # sys.exit()
 
             df00e = pd.DataFrame(tabnum_текдолжность.items(), columns = ["tabnumfio", "тек_должн"])
             # print("\ndf00e")
             # print(df00e)
-            # exit()
+            # sys.exit()
 
             df00 = pd.DataFrame(vrednost_spisok.items(), columns = ["tabnumfio", "Остальные_Данные"])
             # df00 = df00.sort_values(by=["tabnumfio"], ascending=True)
             # print("\ndf00")
             # print(df00)
-            # exit()
+            # sys.exit()
             df00[["Должность", "ФИО_краткое", "Полное_Имя", "Пол", "Дата_Приёма", "Табельный_Номер", "Норма_День"]] = pd.DataFrame(df00.Остальные_Данные.values.tolist(), index= df00.index)
             df00 = df00.drop(["Остальные_Данные"], axis = 1)
             df00 = df00.drop(["Должность"], axis = 1)
@@ -853,7 +856,7 @@ while True:
             # df00 = df00.sort_values(by=["tabnumfio"], ascending=True)
             # print("\ndf00")
             # print(df00)
-            # exit()
+            # sys.exit()
             df00 = pd.merge(df00, df01, how = "left", on = "tabnumfio")
             df00 = pd.merge(df00, df00a, how = "left", on = "tabnumfio")
             df00 = pd.merge(df00, df00b, how = "left", on = "tabnumfio")
@@ -861,7 +864,7 @@ while True:
             # df00 = df00.sort_values(by=["Полное_Имя"], ascending=True)
             # print("\ndf00")
             # print(df00)
-            # exit()
+            # sys.exit()
 
             df02 = pd.DataFrame(tabnum_oklad_fin.items(), columns = ["Табельный_Номер", "Оклад"])
             # print("\ndf02")
@@ -875,7 +878,7 @@ while True:
             # df00 = df00.sort_values(by=["Полное_Имя"], ascending=True)
             # print("\ndf00")
             # print(df00)
-            # exit()
+            # sys.exit()
 
             df06 = pd.DataFrame(tabnum_pererabotka.items(), columns = ["Табельный_Номер", "перераб"])
             # print("\ndf06")
@@ -902,7 +905,7 @@ while True:
             # print(df_total)
             if df_total.empty:
                 print("df_total is empty")
-            # exit()
+            # sys.exit()
             # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
             # RESETTING DATA STRUCTURES
@@ -935,12 +938,12 @@ while True:
             workdateS_obj_list = []
 # LOOP 2 ENDS HERE
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
-# exit()
+# sys.exit()
 print_line("hyphens")
 # df_total = df_total.sort_values(by=["Полное_Имя"], ascending=True)
 # print("\ndf_total")
 # print(df_total)
-# exit()
+# sys.exit()
 
 # новый способ
 # df_total.loc[df_total["Оклад"]>1000, ["Оклад"]] = df_total["Оклад"]/df_total["Норма_мес"]
@@ -951,24 +954,24 @@ df_total = df_total.drop(df_total[(df_total["водители"] == "оплаче
 df_total = df_total.drop(["водители"], axis = 1)
 # print("\ndf_total")
 # print(df_total)
-# exit()
+# sys.exit()
 
 df_subtotal1 = df_total.groupby(["Полное_Имя", "тек_должн"], as_index=False).agg({"Норма_мес": "sum"})
 # df_subtotal1 = df_total.groupby("tabnumfio", as_index=False).agg({"Норма_мес": "sum"})
 # print("\ndf_subtotal1")
 # print(df_subtotal1)
-# exit()
+# sys.exit()
 
 df_subtotal2 = df_total.groupby(["Полное_Имя", "тек_должн"], as_index=False).agg({"Оклад": "mean"})
 # df_subtotal2 = df_total.groupby("tabnumfio", as_index=False).agg({"Оклад": "sum"})
 # print("\ndf_subtotal2")
 # print(df_subtotal2)
-# exit()
+# sys.exit()
 
 df_subtotal3 = df_total.groupby(["Участок", "тек_должн", "Полное_Имя"], as_index=False).agg({"перераб": "sum"})
 # print("\ndf_subtotal3")
 # print(df_subtotal3)
-# exit()
+# sys.exit()
 
 df_total = pd.merge(df_subtotal3, df_subtotal2, how = "right", on = ["Полное_Имя", "тек_должн"])
 df_total = pd.merge(df_total, df_subtotal1, how = "right", on = ["Полное_Имя", "тек_должн"])
@@ -979,12 +982,12 @@ df_total = df_total.sort_values(by=["Полное_Имя"], ascending=True)
 # df_total = df_total.sort_values(by=["тек_должн"], ascending=True)
 # print("\ndf_total")
 # print(df_total)
-# exit()
+# sys.exit()
 
 df_total = df_total[df_total.перераб > 0]
 # print("\ndf_total")
 # print(df_total)
-# exit()
+# sys.exit()
 df_total.loc[df_total["перераб"]<2, ["перераб"]] = round(df_total["перераб"])
 df_total["первые2"] = 0
 df_total["после2"] = 0
@@ -997,7 +1000,7 @@ df_total.loc[df_total["перераб"]>2, ["после2"]] = df_total["пере
 df_total = df_total.sort_values(by=["Полное_Имя"], ascending=True)
 # print("\ndf_total")
 # print(df_total)
-# exit()
+# sys.exit()
 df_total = df_total[df_total.первые2 > 0]
 if inp9 != "5":
     # df_total["Оклад"] = df_total["Оклад"]*3
@@ -1012,7 +1015,7 @@ df_total = df_total.drop(["Оклад"], axis = 1)
 df_total = df_total.drop(["Норма_мес"], axis = 1)
 # print("\ndf_total")
 # print(df_total)
-# exit()
+# sys.exit()
 df_total["сум_первые2"] = df_total["первые2"]*df_total["чтс"]*0.5
 df_total = df_total.drop(["первые2"], axis = 1)
 df_total["сум_после2"] = df_total["после2"]*df_total["чтс"]
@@ -1043,7 +1046,7 @@ df_total = df_total.drop(["index"], axis = 1)
 # print(df_total)
 # ВСЕГО = df_total["сум_итого"].sum()
 # print("ВСЕГО " + str(ВСЕГО))
-# exit()
+# sys.exit()
 print(is_numeric_dtype(df_total["сум_первые2"]))
 print(is_numeric_dtype(df_total["сум_после2"]))
 print(is_numeric_dtype(df_total["сум_итого"]))
@@ -1073,7 +1076,7 @@ print(is_numeric_dtype(df_total["сум_итого"]))
 df_sidetable = df_total.stb.missing()
 print("\ndf_sidetable")
 print(df_sidetable)
-# exit()
+# sys.exit()
 
 # performing analysis
 df_sidetable = df_total.stb.freq(["тек_должн"])
@@ -1095,7 +1098,7 @@ df_sidetable.reset_index(inplace = True)
 df_sidetable = df_sidetable.drop(["index"], axis = 1)
 print("\ndf_sidetable")
 print(df_sidetable)
-exit()
+sys.exit()
 
 # reverting changes
 df_total = df_total.drop(["ОП"], axis = 1)
@@ -1163,14 +1166,14 @@ df_total_ВСЕГО.index = df_total_ВСЕГО.index + 1
 df_total_ВСЕГО.reset_index(inplace = True)
 # print("\ndf_total_ВСЕГО")
 # print(df_total_ВСЕГО)
-# exit()
+# sys.exit()
 
 # df_kprikazu_ВСЕГО
 df_kprikazu_ВСЕГО = df_total_ВСЕГО
 # df_kprikazu_ВСЕГО = df_kprikazu_ВСЕГО.drop(["тек_должн"], axis = 1)
 print("\ndf_kprikazu_ВСЕГО")
 print(df_kprikazu_ВСЕГО)
-# exit()
+# sys.exit()
 
 # k_prikazu to excel
 writing_to_excel_openpyxl(

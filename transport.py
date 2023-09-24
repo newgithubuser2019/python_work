@@ -1,32 +1,32 @@
 # PREPARATION
-import os
 import datetime
-from datetime import datetime
-import re
-import pprint
-import shutil
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font, colors
-import json
 import decimal
+import json
+import os
+import pprint
+import re
+import shutil
+import sys
+from datetime import datetime
 from decimal import Decimal
-import pandas as pd
-import numpy as np
-import sidetable
 from functools import reduce
+
+import numpy as np
+import openpyxl
+import pandas as pd
+import sidetable
+from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
+                             Side, colors)
+from openpyxl.utils import column_index_from_string, get_column_letter
 from pandas.tseries.offsets import DateOffset
+
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 15)
 pd.set_option("expand_frame_repr", False)
-from функции import print_line
-from функции import rawdata_budget
-from функции import pd_movecol
-from функции import pd_toexcel
-from функции import pd_readexcel
-from функции import writing_to_excel_openpyxl
-from функции import json_dump_n_load
+from функции import (json_dump_n_load, pd_movecol, pd_readexcel, pd_toexcel,
+                     print_line, rawdata_budget, writing_to_excel_openpyxl)
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables
 USERPROFILE = os.environ["USERPROFILE"]
@@ -83,7 +83,7 @@ df_выгрузка["госномер"] = df_выгрузка["госномер"
 df_выгрузка["госномер"] = df_выгрузка["госномер"].str.replace("RUSБ","")
 df_выгрузка["госномер"] = df_выгрузка["госномер"].str.replace("RUS","")
 # print(df_выгрузка)
-# exit()
+# sys.exit()
 df_выгрузка["тип"] = df_выгрузка["Тип ТС"]
 df_выгрузка["перевозит"] = ""
 # 

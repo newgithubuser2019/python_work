@@ -1,32 +1,32 @@
 # PREPARATION
-import os
 import datetime
-from datetime import datetime
-import re
-import pprint
-import shutil
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font, colors
-import json
 import decimal
+import json
+import os
+import pprint
+import re
+import shutil
+import sys
+from datetime import datetime
 from decimal import Decimal
-import pandas as pd
-import numpy as np
-import sidetable
 from functools import reduce
+
+import numpy as np
+import openpyxl
+import pandas as pd
+import sidetable
+from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
+                             Side, colors)
+from openpyxl.utils import column_index_from_string, get_column_letter
 from pandas.tseries.offsets import DateOffset
+
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 15)
 pd.set_option("expand_frame_repr", False)
-from функции import print_line
-from функции import rawdata_budget
-from функции import pd_movecol
-from функции import pd_toexcel
-from функции import pd_readexcel
-from функции import writing_to_excel_openpyxl
-from функции import json_dump_n_load
+from функции import (json_dump_n_load, pd_movecol, pd_readexcel, pd_toexcel,
+                     print_line, rawdata_budget, writing_to_excel_openpyxl)
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables
 USERPROFILE = os.environ["USERPROFILE"]
@@ -47,7 +47,7 @@ filename0a = USERPROFILE + "\\Documents\\Работа\\закрытие зп\\з
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------
-# exit()
+# sys.exit()
 for i in listoffiles:
     count += 1
     print(str(count))
@@ -64,7 +64,7 @@ for i in listoffiles:
     today = datetime.strptime(датасдачи, "%d.%m.%Y")
     weeknum = datetime.date(today).isocalendar().week
     """
-    # exit()
+    # sys.exit()
     # кку---------------------------------------------------------------------
     df_from_excel = pd.read_excel(USERPROFILE + "\\Documents\\Работа\\закрытие зп\\за тур\\выращивание\\Муромская\\4\\" + i, sheet_name="Лист1", index_col=0, engine = "openpyxl", header=0, usecols = "A,B,G") # pd_read_excel_cols_list)
     df_from_excel.reset_index(inplace = True)
@@ -81,7 +81,7 @@ for i in listoffiles:
         df_from_excel2 = df_from_excel2.drop(df_from_excel2.columns[[1]], axis = 1)
         findf = findf.append(df_from_excel2, ignore_index = True)
     findf = pd.merge(findf, df_from_excel, how = "outer", on = ["ФИО2"])
-    # exit()
+    # sys.exit()
     # print(findf)
 # df_pivot = pd.pivot_table(findf, index=["месяц", "ФИО2", "должность"], values=["явки"])
 # print(df_pivot)

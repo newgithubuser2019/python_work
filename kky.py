@@ -47,7 +47,8 @@ OP_list = ["Агрин", "Графовская", "Коренская", "Муро
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # prompts for user input
-prompt1 = "\nреализация?: "
+prompt1a = "\nреализация была?: "
+prompt1b = "\nреализация метод?: "
 prompt2 = "\nзаписать в отчет напрямую?: "
 prompt3 = "\nномер строки для записи в отчет напрямую (нумерация excel) - бройлеры?: "
 prompt4 = "\nномер строки для записи в отчет напрямую (нумерация excel) - старка?: "
@@ -56,7 +57,11 @@ prompt6 = "\nmerge df_бройлеры and df_pivot?: "
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # user inputs
-inp1 = input(prompt1)
+inp1a = input(prompt1a)
+inp1b = "новый"
+if inp1a == "да" or inp1a == "yes" or inp1a == "y":
+    # inp1b = input(prompt1b)
+    inp1b = "новый"
 # inp2 = input(prompt2)
 inp2 = "нет"
 if inp2 == "да" or inp2 == "yes" or inp2 == "y":
@@ -72,7 +77,7 @@ inp6 = "да"
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # file paths
 path_кку = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\оу контрольная карта убой\\"
-path_реализация = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\реализация\\"
+path_реализация = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\реализация (суточное движение)\\"
 listoffiles_кку = os.listdir(path_кку)
 listoffiles_реализация = os.listdir(path_реализация)
 # file names
@@ -84,6 +89,7 @@ filename2 = USERPROFILE + "\\Documents\\Работа\\отчетность\\еж
 filename3 = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\Накопительный 2023 - Белгород.xlsx"
 filename4 = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\Накопительный (старка) Белгород 2023.xlsx"
 filename5 = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\время поднятия кормушки\\время поднятия кормушки.xlsx"
+filename6 = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\реализация (регистр накопления)\\реализация.xlsx"
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # ВРЕМЯ ПОДНЯТИЯ КОРМУШКИ---------------------------------------------------------------------
@@ -199,7 +205,8 @@ if inp6 == "да" or inp6 == "yes" or inp6 == "y":
     df_pivot["Падеж голов"] = df_pivot["Падеж голов"].apply(lambda x: x.quantize(decimal.Decimal("0.0")))
     df_pivot["Падеж вес"] = df_pivot["Падеж вес"].apply(lambda x: decimal.Decimal(x))
     df_pivot["Падеж вес"] = df_pivot["Падеж вес"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
-print("\ndf_pivot")
+# print("\ndf_pivot")
+print("\nвремя поднятия кормушки")
 print(df_pivot)
 # sys.exit()
 # if inp6 != "да" or inp6 != "yes" or inp6 != "y":
@@ -246,88 +253,166 @@ if inp5 == "да" or inp5 == "yes" or inp5 == "y":
             )
 
 # РЕАЛИЗАЦИЯ---------------------------------------------------------------------
-if inp1 == "да" or inp1 == "yes" or inp1 == "y":
-    # сп-51---------------------------------------------------------------------
-    df_сп_51 = pd.read_excel(
-        filename2,
-        sheet_name="Лист1",
-        index_col=0,
-        engine = "openpyxl",
-        header=15,
-        usecols = "A,Q,R",
-        )
-    df_сп_51.reset_index(inplace = True)
-    df_сп_51 = df_сп_51.rename(columns={"Пол": "площ", "голов.5": "гол", "масса, кг.6": "вес"})
-    df_сп_51 = df_сп_51.dropna(subset=["гол"])
-    df_сп_51 = df_сп_51.drop(df_сп_51.loc[df_сп_51["площ"].str.contains("Площадка")==False].index)
-    print("\ndf_сп_51")
-    print(df_сп_51)
-    inp0 = input("Продолжить?:")
-    if inp0 == "нет":
-        sys.exit()
-
-    # реализация---------------------------------------------------------------------
-    for i in listoffiles_реализация:
-        regexpr = re.compile(r"(\d{2,4})+(.)")
-        датасдачи2 = ""
-        for gr in regexpr.findall(i):
-            датасдачи2 = датасдачи2 + gr[0]
-            датасдачи2 = датасдачи2 + gr[1]
-        датасдачи2 = датасдачи2[0:-1]
-        print("\nдата_сдачи_реализация")
-        print(датасдачи2)
-        wb = openpyxl.load_workbook(path_реализация + i)
-        ws = wb["Лист1"]
-        rowmax = ws.max_row + 1
-        # print(rowmax)
-        площадка = str(ws.cell(row = 3, column = 1).value)
-        площадка = площадка.replace("Суточное движение поголовья Площадка ","")
-        df_реализация = pd.read_excel(
-            path_реализация + i,
-            sheet_name="Лист1",
-            index_col=0,
-            engine = "openpyxl",
-            header=7,
-            usecols = "A,M,N",
+if inp1a == "да" or inp1a == "yes" or inp1a == "y":
+    if inp1b == "новый":
+        df_from_excel = pd.read_excel(
+            filename6,
+            sheet_name="TDSheet",
+            # index_col=0,
+            # engine = "openpyxl",
+            header=0,
+            usecols = "A,J,N,O,P,Q,U",
             )
-        df_реализация.reset_index(inplace = True)
-        df_реализация = df_реализация.rename(columns={"index": "корп", "гол..5": "Живок голов", "вес.5": "Живок вес"})
-        df_реализация = df_реализация.dropna(subset=["Живок голов"])
-        df_реализация = df_реализация.drop(df_реализация.loc[df_реализация["корп"].str.contains("Итого", na=False)].index)
-        df_реализация = df_реализация.drop(df_реализация.loc[df_реализация["корп"].str.contains("Всего", na=False)].index)
-        df_реализация["Живок вес"]=df_реализация["Живок вес"].astype(str)
-        df_реализация["Живок вес"] = df_реализация["Живок вес"].str.replace(" ","")
-        df_реализация["Живок вес"] = df_реализация["Живок вес"].str.replace(",",".")
-        df_реализация["Живок вес"] = pd.to_numeric(df_реализация["Живок вес"], errors="coerce")
-        # 
-        df_реализация["Живок голов"]=df_реализация["Живок голов"].astype(str)
-        df_реализация["Живок голов"] = df_реализация["Живок голов"].str.replace(" ","")
-        df_реализация["Живок голов"] = df_реализация["Живок голов"].str.replace(",",".")
-        df_реализация["Живок голов"] = pd.to_numeric(df_реализация["Живок голов"], errors="coerce")
-        # 
-        df_реализация = df_реализация.groupby(["корп"], as_index=False).agg({"Живок голов": "sum", "Живок вес": "sum"})
-        df_реализация["старка"] = площадка
-        df_реализация["направ"] = "Центр"
-        df_реализация["комб"] = "Реализация"
-        df_реализация["Падеж голов"] = 0
-        df_реализация["Падеж вес"] = 0
-        df_реализация["дата.сдачи"] = датасдачи2
-        df_реализация = функции.pd_movecol(
-            df_реализация,
-            cols_to_move=["старка", "направ", "комб"],
-            ref_col="корп",
-            place="Before"
-            )
-        df_реализация = функции.pd_movecol(
-            df_реализация,
-            cols_to_move=["дата.сдачи"],
+        df_from_excel = df_from_excel.drop(df_from_excel[(df_from_excel["Причина движения"] != "Реализация стороннему ЮЛ, ЮЛ ГАП, физ. лицу")].index)
+        df_from_excel.reset_index(inplace = True)
+        df_from_excel = df_from_excel.drop(["index"], axis = 1)
+        #
+        df_from_excel["Падеж в пути вес"] = df_from_excel["Падеж в пути вес"].fillna(0.0)
+        df_from_excel["Падеж в пути головы"] = df_from_excel["Падеж в пути головы"].fillna(0.0)
+        # df_from_excel["Причина движения"] = df_from_excel["Причина движения"].fillna(0.0)
+        #
+        df_from_excel.loc[df_from_excel["Период"].str.contains(" "), ["Период"]] = df_from_excel["Период"].str.rsplit(" ").str[0]
+        df_from_excel = df_from_excel.rename(columns={
+            "Период": "дата.сдачи",
+            "Вес": "Живок вес",
+            "Головы": "Живок голов",
+            "Падеж в пути вес": "Падеж вес",
+            "Падеж в пути головы": "Падеж голов",
+            })
+        #
+        # df_from_excel["Живок голов"] = df_from_excel["Живок голов"].apply(lambda x: decimal.Decimal(x))
+        # df_from_excel["Живок голов"] = df_from_excel["Живок голов"].apply(lambda x: x.quantize(decimal.Decimal("0.0")))
+        # df_from_excel["Живок вес"] = df_from_excel["Живок вес"].apply(lambda x: decimal.Decimal(x))
+        # df_from_excel["Живок вес"] = df_from_excel["Живок вес"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
+        # df_from_excel["Падеж голов"] = df_from_excel["Падеж голов"].apply(lambda x: decimal.Decimal(x))
+        # df_from_excel["Падеж голов"] = df_from_excel["Падеж голов"].apply(lambda x: x.quantize(decimal.Decimal("0.0")))
+        # df_from_excel["Падеж вес"] = df_from_excel["Падеж вес"].apply(lambda x: decimal.Decimal(x))
+        # df_from_excel["Падеж вес"] = df_from_excel["Падеж вес"].apply(lambda x: x.quantize(decimal.Decimal("0.0000")))
+        #
+        df_from_excel["старка"] = None
+        df_from_excel.loc[df_from_excel["Корпус"].str.contains(" пл."), ["старка"]] = df_from_excel["Корпус"]
+        #
+        df_from_excel["корп"] = None
+        df_from_excel.loc[df_from_excel["Корпус"].str.contains("корпус"), ["корп"]] = df_from_excel["Корпус"].str[0:3]
+        df_from_excel.loc[df_from_excel["корп"].str.contains(" к", na=False), ["корп"]] = df_from_excel["корп"].str[0:2]
+        df_from_excel["корп"] = "_" + df_from_excel["корп"].astype(str) + "_"
+        df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace(" ","")) # здесь не пробел, а специальный символ из 1С
+        df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace("_",""))
+        df_from_excel.loc[df_from_excel["старка"].str.contains("Муромское"), ["корп"]] = df_from_excel["корп"].astype(str).str[:1] + "." +df_from_excel["корп"].astype(str).str[1:]
+        df_from_excel.loc[df_from_excel["старка"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",","))
+        df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
+        #
+        df_from_excel = df_from_excel.drop(["Корпус"], axis = 1)
+        #
+        df_from_excel = функции.pd_movecol(
+            df_from_excel,
+            cols_to_move=["дата.сдачи", "Живок голов", "Живок вес", "Падеж голов", "Падеж вес"],
             ref_col="корп",
             place="After"
             )
-        df_реализация_fin = pd.concat([df_реализация_fin, df_реализация], ignore_index = True)
-        print("\ndf_реализация")
-        print(df_реализация)
-        # print(df_реализация.dtypes)
+        #
+        df_from_excel = df_from_excel.drop(["Причина движения"], axis = 1)
+        df_from_excel["направ"] = "Центр"
+        df_from_excel["комб"] = "Реализация"
+        #
+        df_from_excel = функции.pd_movecol(
+            df_from_excel,
+            cols_to_move=["направ", "комб"],
+            ref_col="старка",
+            place="After"
+            )
+        #
+        # print(df_from_excel.head())
+        # print(df_from_excel)
+        # print(df_from_excel.dtypes)
+        df_реализация_fin = df_from_excel.copy(deep=True)
+        функции.print_line("hyphens")
+        print("\ndf_реализация_fin")
+        print(df_реализация_fin)
+        # sys.exit()
+
+    if inp1b == "старый":
+        # сп-51---------------------------------------------------------------------
+        df_сп_51 = pd.read_excel(
+            filename2,
+            sheet_name="Лист1",
+            index_col=0,
+            engine = "openpyxl",
+            header=15,
+            usecols = "A,Q,R",
+            )
+        df_сп_51.reset_index(inplace = True)
+        df_сп_51 = df_сп_51.rename(columns={"Пол": "площ", "голов.5": "гол", "масса, кг.6": "вес"})
+        df_сп_51 = df_сп_51.dropna(subset=["гол"])
+        df_сп_51 = df_сп_51.drop(df_сп_51.loc[df_сп_51["площ"].str.contains("Площадка")==False].index)
+        print("\ndf_сп_51")
+        print(df_сп_51)
+        inp0 = input("Продолжить?:")
+        if inp0 == "нет":
+            sys.exit()
+
+        # реализация---------------------------------------------------------------------
+        for i in listoffiles_реализация:
+            regexpr = re.compile(r"(\d{2,4})+(.)")
+            датасдачи2 = ""
+            for gr in regexpr.findall(i):
+                датасдачи2 = датасдачи2 + gr[0]
+                датасдачи2 = датасдачи2 + gr[1]
+            датасдачи2 = датасдачи2[0:-1]
+            print("\nдата_сдачи_реализация")
+            print(датасдачи2)
+            wb = openpyxl.load_workbook(path_реализация + i)
+            ws = wb["Лист1"]
+            rowmax = ws.max_row + 1
+            # print(rowmax)
+            площадка = str(ws.cell(row = 3, column = 1).value)
+            площадка = площадка.replace("Суточное движение поголовья Площадка ","")
+            df_реализация = pd.read_excel(
+                path_реализация + i,
+                sheet_name="Лист1",
+                index_col=0,
+                engine = "openpyxl",
+                header=7,
+                usecols = "A,M,N",
+                )
+            df_реализация.reset_index(inplace = True)
+            df_реализация = df_реализация.rename(columns={"index": "корп", "гол..5": "Живок голов", "вес.5": "Живок вес"})
+            df_реализация = df_реализация.dropna(subset=["Живок голов"])
+            df_реализация = df_реализация.drop(df_реализация.loc[df_реализация["корп"].str.contains("Итого", na=False)].index)
+            df_реализация = df_реализация.drop(df_реализация.loc[df_реализация["корп"].str.contains("Всего", na=False)].index)
+            df_реализация["Живок вес"]=df_реализация["Живок вес"].astype(str)
+            df_реализация["Живок вес"] = df_реализация["Живок вес"].str.replace(" ","")
+            df_реализация["Живок вес"] = df_реализация["Живок вес"].str.replace(",",".")
+            df_реализация["Живок вес"] = pd.to_numeric(df_реализация["Живок вес"], errors="coerce")
+            # 
+            df_реализация["Живок голов"]=df_реализация["Живок голов"].astype(str)
+            df_реализация["Живок голов"] = df_реализация["Живок голов"].str.replace(" ","")
+            df_реализация["Живок голов"] = df_реализация["Живок голов"].str.replace(",",".")
+            df_реализация["Живок голов"] = pd.to_numeric(df_реализация["Живок голов"], errors="coerce")
+            # 
+            df_реализация = df_реализация.groupby(["корп"], as_index=False).agg({"Живок голов": "sum", "Живок вес": "sum"})
+            df_реализация["старка"] = площадка
+            df_реализация["направ"] = "Центр"
+            df_реализация["комб"] = "Реализация"
+            df_реализация["Падеж голов"] = 0
+            df_реализация["Падеж вес"] = 0
+            df_реализация["дата.сдачи"] = датасдачи2
+            df_реализация = функции.pd_movecol(
+                df_реализация,
+                cols_to_move=["старка", "направ", "комб"],
+                ref_col="корп",
+                place="Before"
+                )
+            df_реализация = функции.pd_movecol(
+                df_реализация,
+                cols_to_move=["дата.сдачи"],
+                ref_col="корп",
+                place="After"
+                )
+            df_реализация_fin = pd.concat([df_реализация_fin, df_реализация], ignore_index = True)
+            print("\ndf_реализация")
+            print(df_реализация)
+            # print(df_реализация.dtypes)
     # sys.exit()
 
 # ДИНАМИКА РАЗВИТИЯ ПТИЦЫ---------------------------------------------------------------------

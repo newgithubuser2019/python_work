@@ -41,7 +41,7 @@ df_реализация_fin = pd.DataFrame()
 findf = pd.DataFrame()
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # default lists
-OP_list = ["Агрин", "Графовская", "Коренская", "Муромская", "Нежегольская", "Полянская", "Томаровская", "Валуйская", "Рождественская"]
+OP_list = ["Агрин", "Графовская", "Коренская", "Муромская", "Муромская БС 1", "Муромская БС 2", "Нежегольская", "Полянская", "Томаровская", "Валуйская", "Рождественская"]
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # default dictionaries
 
@@ -120,7 +120,9 @@ df_from_excel.loc[df_from_excel["площ"].str.contains("Коренская"), 
 df_from_excel.loc[df_from_excel["площ"].str.contains("Графовская"), ["площ"]] = "Графовское"
 df_from_excel.loc[df_from_excel["площ"].str.contains("Полянская"), ["площ"]] = "Полянское"
 df_from_excel.loc[df_from_excel["площ"].str.contains("Томаровская"), ["площ"]] = "Томаровское"
-df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское"
+# df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское"
+df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская 1")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское 1"
+df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская 2")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское 2"
 df_from_excel.loc[df_from_excel["площ"].str.contains("Нежегольская"), ["площ"]] = "Нежегольское"
 df_from_excel.loc[df_from_excel["площ"].str.contains("Валуйская"), ["площ"]] = "Валуйское"
 df_from_excel.loc[df_from_excel["площ"].str.contains("Рождественская"), ["площ"]] = "Рождественское"
@@ -435,7 +437,7 @@ df_динамика["корп"] = df_динамика["корп"].apply(lambda x
 #
 df_динамика["Дата посадки"] = pd.to_numeric(df_динамика["Дата посадки"], errors="coerce")
 df_динамика["Дата посадки"] = pd.to_datetime(df_динамика["Дата посадки"], dayfirst=True, unit="D", origin="1899-12-30")
-df_динамика.loc[df_динамика["№ корпуса"].apply(lambda x: x not in ["Агрин", "Графовское", "Коренское", "Муромское", "Нежегольское", "Полянское", "Томаровское", "Валуйское", "Рождественское"]), ["№ корпуса"]] = np.nan
+df_динамика.loc[df_динамика["№ корпуса"].apply(lambda x: x not in ["Агрин", "Графовское", "Коренское", "Муромское", "Муромское 1", "Муромское 2", "Нежегольское", "Полянское", "Томаровское", "Валуйское", "Рождественское"]), ["№ корпуса"]] = np.nan
 # df_динамика["№ корпуса"] = df_динамика["№ корпуса"].fillna(method="ffill") # deprecated
 df_динамика["№ корпуса"] = df_динамика["№ корпуса"].ffill()
 df_динамика = df_динамика.rename(columns={"№ корпуса": "площ"})
@@ -505,6 +507,8 @@ for i in listoffiles_кку:
     #
     # df_from_excel.loc[df_from_excel["index"].str.contains("СтБр"), ["площ"]] = df_from_excel["index"].map(lambda x: x.rstrip(" СтБр"))
     df_from_excel.loc[df_from_excel["index"].map(lambda x: x in OP_list), ["площ"]] = df_from_excel["index"]
+    df_from_excel.loc[df_from_excel["index"].str.contains("Муромская БС 1"), ["площ"]] = "Муромская 1"
+    df_from_excel.loc[df_from_excel["index"].str.contains("Муромская БС 2"), ["площ"]] = "Муромская 2"
     df_from_excel.loc[(df_from_excel["index"].str.contains("РС")==True) & (df_from_excel["index"].str.contains("корпус")==False), ["площ"]] = df_from_excel["index"]
     df_from_excel.loc[(df_from_excel["index"].str.contains("РМ")) & (df_from_excel["index"].str.contains("корпус")==False), ["площ"]] = df_from_excel["index"]
     # df_from_excel["площ"] = df_from_excel["площ"].fillna(method="ffill") # deprecated
@@ -571,7 +575,9 @@ for i in listoffiles_кку:
     df_from_excel.loc[df_from_excel["площ"].str.contains("Графовская"), ["площ"]] = "Графовское"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Полянская"), ["площ"]] = "Полянское"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Томаровская"), ["площ"]] = "Томаровское"
-    df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское"
+    # df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское"
+    df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская 1")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское 1"
+    df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская 2")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское 1"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Нежегольская"), ["площ"]] = "Нежегольское"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Валуйская"), ["площ"]] = "Валуйское"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Рождественская"), ["площ"]] = "Рождественское"

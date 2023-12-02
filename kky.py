@@ -73,6 +73,7 @@ if inp2 == "да" or inp2 == "yes" or inp2 == "y":
 inp5 = "нет"
 # inp6 = input(prompt6)
 inp6 = "да"
+# inp6 = "нет"
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # file paths
@@ -133,9 +134,18 @@ df_from_excel.loc[df_from_excel["корп"].str.contains(" к", na=False), ["к�
 df_from_excel["корп"] = "_" + df_from_excel["корп"].astype(str) + "_"
 df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace(" ","")) # здесь не пробел, а специальный символ из 1С
 df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace("_",""))
-df_from_excel.loc[df_from_excel["площ"].str.contains("Муромское"), ["корп"]] = df_from_excel["корп"].astype(str).str[:1] + "." +df_from_excel["корп"].astype(str).str[1:]
-df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",","))
-df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
+# df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].astype(str).str[:1] + "." +df_from_excel["корп"].astype(str).str[1:]
+# df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",","))
+# df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
+# df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdecimal() else x)
+df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
+df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"]/10
+# df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].astype(str) + "/" + "10"
+# df_from_excel.loc[df_from_excel["корп"].str.contains("/", na=False), ["корп"]] = df_from_excel["корп"].apply(pd.eval)
+#
+# print(df_from_excel)
+# print(df_from_excel.dtypes)
+# sys.exit()
 #
 df_from_excel = df_from_excel.drop(["Корпус"], axis = 1)
 # df_from_excel["pivot_index"] = df_from_excel["Дата и время посадки/выбытия"]+df_from_excel["площ"]+df_from_excel["корп"].astype(str)+df_from_excel["Время поднятия кормушки"]+df_from_excel["Головы"].astype(str)+df_from_excel["Вес, кг"].astype(str)
@@ -302,7 +312,9 @@ if inp1a == "да" or inp1a == "yes" or inp1a == "y":
         df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace("_",""))
         df_from_excel.loc[df_from_excel["старка"].str.contains("Муромское"), ["корп"]] = df_from_excel["корп"].astype(str).str[:1] + "." +df_from_excel["корп"].astype(str).str[1:]
         df_from_excel.loc[df_from_excel["старка"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",","))
-        df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
+        # df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
+        df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
+        # df_from_excel.loc[df_from_excel["старка"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"]/10
         #
         df_from_excel = df_from_excel.drop(["Корпус"], axis = 1)
         #
@@ -594,9 +606,12 @@ for i in listoffiles_кку:
     # print(df_from_excel.dtypes)
     # sys.exit()
     df_from_excel = pd.merge(df_from_excel, df_динамика, how = "left", on = ["площ", "корп"])
-    df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",","))
+    # df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",","))
+    df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",""))
     # df_from_excel["корп"] = pd.to_numeric(df_from_excel["корп"], errors="ignore")
-    df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
+    # df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
+    df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
+    df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"]/10
     df_from_excel = функции.pd_movecol(
         df_from_excel,
         cols_to_move=["Дата посадки"],
@@ -605,6 +620,7 @@ for i in listoffiles_кку:
         )
     print("\nЦБ")
     print(df_from_excel)
+    # print(df_from_excel.dtypes)
     # sys.exit()
 
     # findf-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -652,6 +668,13 @@ df_бройлеры = функции.pd_movecol(
         place="After"
         )
 if inp6 == "да" or inp6 == "yes" or inp6 == "y":
+    # print(df_pivot)
+    # print(df_pivot.dtypes)
+    # df_бройлеры = df_бройлеры.drop(["Дата посадки"], axis = 1) # для диагностики, чтобы df помещался на экран
+    # df_бройлеры = df_бройлеры.drop(["прибытие"], axis = 1) # для диагностики, чтобы df помещался на экран
+    # print(df_бройлеры)
+    # print(df_бройлеры.dtypes)
+    # sys.exit()
     df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["площ", "корп", "Живок голов", "Живок вес", "Падеж голов", "Падеж вес"])
     # df_бройлеры["Живок вес"] = df_бройлеры["Живок вес"] - df_бройлеры["жкт"]
     # df_бройлеры = df_бройлеры.drop(["жкт"], axis = 1)
@@ -671,16 +694,16 @@ if inp6 == "да" or inp6 == "yes" or inp6 == "y":
     df_pivot["Живок вес"] = pd.to_numeric(df_pivot["Живок вес"], errors="coerce")
     df_pivot["Падеж голов"] = pd.to_numeric(df_pivot["Падеж голов"], errors="coerce")
     df_pivot["Падеж вес"] = pd.to_numeric(df_pivot["Падеж вес"], errors="coerce")
-    функции.pd_toexcel(
-                pd,
-                #
-                filename = filename0a,
-                разновидность = "Лист1",
-                df_для_записи = df_pivot,
-                header_pd = "True",
-                rowtostartin_pd = 0,
-                coltostartin_pd = 0,
-            )
+функции.pd_toexcel(
+            pd,
+            #
+            filename = filename0a,
+            разновидность = "Лист1",
+            df_для_записи = df_pivot,
+            header_pd = "True",
+            rowtostartin_pd = 0,
+            coltostartin_pd = 0,
+        )
 # print("\ndf_бройлеры")
 # print(df_бройлеры)
 # print(df_бройлеры.dtypes)
@@ -807,8 +830,10 @@ df_старка = функции.pd_movecol(
         place="Before"
         )
 df_старка = df_старка.groupby(["старка", "направ", "комб", "корп", "дата.сдачи"], as_index=False).agg({"Живок голов": "sum", "Живок вес": "sum", "Падеж голов": "sum", "Падеж вес": "sum"})
-if df_реализация_fin.empty == False:
+if df_реализация_fin.empty == False and df_старка.empty == False:
     df_старка = pd.concat([df_старка, df_реализация_fin], ignore_index = True)
+if df_реализация_fin.empty == False and df_старка.empty == True:
+    df_старка = df_реализация_fin.copy(deep=True)
 #
 df_старка.loc[df_старка["старка"].str.contains("Истобнянская РМ 1"), ["старка"]] = "Истобнянская (РМ 1)"
 df_старка.loc[df_старка["старка"].str.contains("Истобнянская РМ 2"), ["старка"]] = "Истобнянская (РМ 2)"

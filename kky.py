@@ -589,7 +589,7 @@ for i in listoffiles_кку:
     df_from_excel.loc[df_from_excel["площ"].str.contains("Томаровская"), ["площ"]] = "Томаровское"
     # df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское"
     df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская 1")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское 1"
-    df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская 2")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское 1"
+    df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромская 2")==True) & (df_from_excel["площ"].str.contains(" РМ")==False) & (df_from_excel["площ"].str.contains(" РС")==False), ["площ"]] = "Муромское 2"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Нежегольская"), ["площ"]] = "Нежегольское"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Валуйская"), ["площ"]] = "Валуйское"
     df_from_excel.loc[df_from_excel["площ"].str.contains("Рождественская"), ["площ"]] = "Рождественское"

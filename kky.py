@@ -138,8 +138,10 @@ df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace(
 # df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",","))
 # df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
 # df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdecimal() else x)
-df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
-df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"]/10
+#
+# df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
+# df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"]/10
+#
 # df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].astype(str) + "/" + "10"
 # df_from_excel.loc[df_from_excel["корп"].str.contains("/", na=False), ["корп"]] = df_from_excel["корп"].apply(pd.eval)
 #
@@ -454,6 +456,7 @@ df_динамика.loc[df_динамика["№ корпуса"].apply(lambda x
 df_динамика["№ корпуса"] = df_динамика["№ корпуса"].ffill()
 df_динамика = df_динамика.rename(columns={"№ корпуса": "площ"})
 df_динамика = df_динамика.dropna(subset=["Дата посадки"])
+df_динамика.loc[df_динамика["площ"].str.contains("Муромск"), ["корп"]] = df_динамика["корп"].apply(lambda x: x.replace(".",""))
 # print("\ndf_динамика")
 # print(df_динамика)
 # print(df_динамика.dtypes)
@@ -599,7 +602,7 @@ for i in listoffiles_кку:
     # df_from_excel["корп"] = df_from_excel["корп"].str.replace(" ","") # здесь не пробел, а специальный символ из 1С
     df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace(" ","")) # здесь не пробел, а специальный символ из 1С
     df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace("_",""))
-    df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромское")) & (df_from_excel["старка"] == "нет"), ["корп"]] = df_from_excel["корп"].astype(str).str[:1] + "." +df_from_excel["корп"].astype(str).str[1:]
+    # df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромское")) & (df_from_excel["старка"] == "нет"), ["корп"]] = df_from_excel["корп"].astype(str).str[:1] + "." +df_from_excel["корп"].astype(str).str[1:]
     #
     # print("\ndf_from_excel")
     # print(df_from_excel)
@@ -607,11 +610,13 @@ for i in listoffiles_кку:
     # sys.exit()
     df_from_excel = pd.merge(df_from_excel, df_динамика, how = "left", on = ["площ", "корп"])
     # df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",","))
-    df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",""))
+    # df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"].apply(lambda x: x.replace(".",""))
     # df_from_excel["корп"] = pd.to_numeric(df_from_excel["корп"], errors="ignore")
     # df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isdigit() else x)
-    df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
-    df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"]/10
+    #
+    # df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
+    # df_from_excel.loc[df_from_excel["площ"].str.contains("Муромск"), ["корп"]] = df_from_excel["корп"]/10
+    #
     df_from_excel = функции.pd_movecol(
         df_from_excel,
         cols_to_move=["Дата посадки"],
@@ -631,6 +636,8 @@ for i in listoffiles_кку:
 findf["дата.сдачи.dt"] = pd.to_datetime(findf["дата.сдачи"], dayfirst=True)
 findf = findf.sort_values(by=["дата.сдачи.dt", "площ", "корп", "прибытие"], ascending=True)
 findf = findf.drop(["дата.сдачи.dt"], axis = 1)
+# findf.loc[(findf["площ"].str.contains("Муромск")) & (findf["старка"] == "нет"), ["корп"]] = findf["корп"].astype(str).str[0] + "," + findf["корп"].astype(str).str[1]
+#
 функции.print_line("hyphens")
 print("\nИТОГО")
 print(findf)
@@ -676,6 +683,9 @@ if inp6 == "да" or inp6 == "yes" or inp6 == "y":
     # print(df_бройлеры.dtypes)
     # sys.exit()
     df_бройлеры = pd.merge(df_бройлеры, df_pivot, how = "left", on = ["площ", "корп", "Живок голов", "Живок вес", "Падеж голов", "Падеж вес"])
+    # df_бройлеры.loc[df_бройлеры["площ"].str.contains("Муромск"), ["корп"]] = df_бройлеры["корп"].astype(str).str[0] + "," + df_бройлеры["корп"].astype(str).str[1]
+    df_бройлеры["корп"] = df_бройлеры["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
+    df_бройлеры.loc[df_бройлеры["площ"].str.contains("Муромск"), ["корп"]] = df_бройлеры["корп"]/10
     # df_бройлеры["Живок вес"] = df_бройлеры["Живок вес"] - df_бройлеры["жкт"]
     # df_бройлеры = df_бройлеры.drop(["жкт"], axis = 1)
     df_бройлеры["без_корма"] = df_бройлеры["прибытие"] - df_бройлеры["Время поднятия кормушки"]
@@ -869,6 +879,8 @@ df_старка["Живок голов"] = pd.to_numeric(df_старка["Жив
 df_старка["Живок вес"] = pd.to_numeric(df_старка["Живок вес"], errors="coerce")
 df_старка["Падеж голов"] = pd.to_numeric(df_старка["Падеж голов"], errors="coerce")
 df_старка["Падеж вес"] = pd.to_numeric(df_старка["Падеж вес"], errors="coerce")
+#
+df_старка["корп"] = df_старка["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
 #
 
 if df_старка.empty == True:

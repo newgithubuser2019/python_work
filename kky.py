@@ -100,7 +100,8 @@ df_from_excel = pd.read_excel(
     # index_col=0,
     # engine = "openpyxl",
     header=0,
-    usecols = "H,J,K,L,O,Q,U",
+    # usecols = "H,J,K,L,O,Q,U",
+    usecols = "T,H,J,K,L,O,Q,U",
     )
 df_from_excel = df_from_excel.loc[(df_from_excel["Вид выбытия"].str.contains("Основная")) | (df_from_excel["Вид выбытия"].str.contains("Разрежение"))]
 df_from_excel = df_from_excel.dropna(subset=["Время поднятия кормушки"])
@@ -157,8 +158,9 @@ df_from_excel = df_from_excel.drop(["Корпус"], axis = 1)
 #
 df_pivot = pd.pivot_table(
     df_from_excel,
-    # index=["Дата и время посадки/выбытия", "площ", "Вид выбытия",  "корп", "Время поднятия кормушки"],
-    index=["Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки"],
+    # index=["Дата и время посадки/выбытия", "площ", "Вид выбытия",  "корп", "Время поднятия кормушки"]
+    # index=["Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки"],
+    index=["Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки", "Мелковесная птица"],
     # index=["pivot_index", "Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки"],
     columns=["Причина движения"],
     # values=["Головы"],
@@ -188,6 +190,9 @@ try:
     df_pivot = df_pivot.drop(["На мясо вес"], axis = 1)
 except KeyError:
     pass
+# print("\ndf_pivot")
+# print(df_pivot)
+# sys.exit()
 df_pivot = df_pivot.explode(["Падеж вес", "Живок вес", "Падеж голов", "Живок голов"])
 df_pivot.reset_index(inplace = True)
 df_pivot = df_pivot.drop(["index"], axis = 1)
@@ -603,6 +608,7 @@ for i in listoffiles_кку:
     df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace(" ","")) # здесь не пробел, а специальный символ из 1С
     df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace("_",""))
     # df_from_excel.loc[(df_from_excel["площ"].str.contains("Муромское")) & (df_from_excel["старка"] == "нет"), ["корп"]] = df_from_excel["корп"].astype(str).str[:1] + "." +df_from_excel["корп"].astype(str).str[1:]
+    # df_from_excel = df_from_excel.dropna(subset=["Живок голов"])
     #
     # print("\ndf_from_excel")
     # print(df_from_excel)

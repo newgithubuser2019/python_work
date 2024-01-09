@@ -888,6 +888,8 @@ df_старка["Падеж вес"] = pd.to_numeric(df_старка["Падеж
 #
 df_старка["корп"] = df_старка["корп"].apply(lambda x: float(x) if str(x).isnumeric() else x)
 #
+df_старка = df_старка.sort_values(by=["дата.сдачи", "комб", "старка", "корп"], ascending=True)
+#
 
 if df_старка.empty == True:
     print("\nСТАРКИ НЕ БЫЛО")

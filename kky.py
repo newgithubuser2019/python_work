@@ -555,11 +555,17 @@ for i in listoffiles_кку:
     df_from_excel = df_from_excel.drop(["index"], axis = 1)
     df_from_excel["Падеж голов"] = df_from_excel["Падеж голов"].fillna("0")
     df_from_excel["Падеж вес"] = df_from_excel["Падеж вес"].fillna("0")
-    df_from_excel["Живок голов"] = df_from_excel["Живок голов"].str.replace(" ","")
-    df_from_excel["Падеж голов"] = df_from_excel["Падеж голов"].str.replace(" ","")
     # print("\ndf_from_excel")
     # print(df_from_excel)
+    # print(df_from_excel.dtypes)
     # sys.exit()
+    df_from_excel["Живок голов"] = df_from_excel["Живок голов"].str.replace(" ","")
+    try:
+        df_from_excel["Падеж голов"] = df_from_excel["Падеж голов"].str.replace(" ","")
+    except AttributeError:
+        # df_from_excel["Падеж голов"] = df_from_excel["Падеж голов"].astype(str)
+        # df_from_excel["Падеж голов"] = df_from_excel["Падеж голов"].str.replace(" ","")
+        pass
     df_from_excel["Живок вес"] = df_from_excel["Живок вес"].str.replace(" ","")
     df_from_excel["Живок вес"] = df_from_excel["Живок вес"].str.replace(",",".")
     df_from_excel["Падеж вес"] = df_from_excel["Падеж вес"].str.replace(" ","")

@@ -1,6 +1,8 @@
-import openpyxl
-import pprint
+# import pprint
 import os
+
+import openpyxl
+
 USERPROFILE = os.environ["USERPROFILE"]
 
 # filepaths

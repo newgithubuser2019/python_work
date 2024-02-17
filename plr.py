@@ -9,8 +9,7 @@ from pathlib import Path
 import openpyxl
 import pandas as pd
 import sidetable
-from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
-                             Side)
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Protection, Side
 from openpyxl.utils import column_index_from_string, get_column_letter
 
 pd.set_option("display.max_rows", 1500)
@@ -18,8 +17,14 @@ pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 30)
 pd.set_option("expand_frame_repr", True)
 # import numpy as np
-from функции import (pd_movecol, pd_readexcel, pd_toexcel, print_line,
-                     rawdata_plr, writing_to_excel_openpyxl)
+from функции import (
+    pd_movecol,
+    pd_readexcel,
+    pd_toexcel,
+    print_line,
+    rawdata_plr,
+    writing_to_excel_openpyxl,
+)
 
 # global variables
 USERPROFILE = os.environ["USERPROFILE"]

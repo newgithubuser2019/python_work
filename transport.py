@@ -15,8 +15,15 @@ import numpy as np
 import openpyxl
 import pandas as pd
 import sidetable
-from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
-                             Side, colors)
+from openpyxl.styles import (
+    Alignment,
+    Border,
+    Font,
+    PatternFill,
+    Protection,
+    Side,
+    colors,
+)
 from openpyxl.utils import column_index_from_string, get_column_letter
 from pandas.tseries.offsets import DateOffset
 
@@ -24,8 +31,15 @@ pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 15)
 pd.set_option("expand_frame_repr", False)
-from функции import (json_dump_n_load, pd_movecol, pd_readexcel, pd_toexcel,
-                     print_line, rawdata_budget, writing_to_excel_openpyxl)
+from функции import (
+    json_dump_n_load,
+    pd_movecol,
+    pd_readexcel,
+    pd_toexcel,
+    print_line,
+    rawdata_budget,
+    writing_to_excel_openpyxl,
+)
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables

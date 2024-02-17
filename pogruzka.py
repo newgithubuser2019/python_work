@@ -7,8 +7,7 @@ from functools import reduce
 import openpyxl
 import pandas as pd
 import sidetable
-from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
-                             Side)
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Protection, Side
 from openpyxl.utils import column_index_from_string, get_column_letter
 
 # pd.set_option("display.max_rows", 1500)

@@ -4,6 +4,7 @@ import decimal
 import os
 import re
 import sys
+
 # import shutil
 import time
 
@@ -455,12 +456,23 @@ df_динамика["корп"] = df_динамика["корп"].apply(lambda x
 df_динамика["корп"] = df_динамика["корп"].apply(lambda x: x.replace("_",""))
 #
 df_динамика["Дата посадки"] = pd.to_numeric(df_динамика["Дата посадки"], errors="coerce")
+# try:
 df_динамика["Дата посадки"] = pd.to_datetime(df_динамика["Дата посадки"], dayfirst=True, unit="D", origin="1899-12-30")
+# except FloatingPointError:
+# df_динамика["Дата посадки"] = "overflow"
+# print("\ndf_динамика")
+# print(df_динамика)
+# print(df_динамика.dtypes)
+# sys.exit()
 df_динамика.loc[df_динамика["№ корпуса"].apply(lambda x: x not in ["Агрин", "Графовское", "Коренское", "Муромское", "Муромское 1", "Муромское 2", "Нежегольское", "Полянское", "Томаровское", "Валуйское", "Рождественское"]), ["№ корпуса"]] = np.nan
 # df_динамика["№ корпуса"] = df_динамика["№ корпуса"].fillna(method="ffill") # deprecated
 df_динамика["№ корпуса"] = df_динамика["№ корпуса"].ffill()
 df_динамика = df_динамика.rename(columns={"№ корпуса": "площ"})
 df_динамика = df_динамика.dropna(subset=["Дата посадки"])
+# print("\ndf_динамика")
+# print(df_динамика)
+# print(df_динамика.dtypes)
+# sys.exit()
 df_динамика.loc[df_динамика["площ"].str.contains("Муромск"), ["корп"]] = df_динамика["корп"].apply(lambda x: x.replace(".",""))
 # print("\ndf_динамика")
 # print(df_динамика)

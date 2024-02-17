@@ -12,9 +12,9 @@ import openpyxl
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
-import sidetable
-from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
-                             Side)
+
+# import sidetable
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Protection, Side
 from openpyxl.utils import column_index_from_string, get_column_letter
 from pandas.api.types import is_numeric_dtype
 
@@ -22,8 +22,7 @@ pd.set_option("display.max_rows", 1600)
 pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 25)
 pd.set_option("expand_frame_repr", False)
-from функции import (pd_movecol, print_line, rawdata_pererabotka,
-                     writing_to_excel_openpyxl)
+from функции import pd_movecol, print_line, rawdata_pererabotka
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables

@@ -1,8 +1,10 @@
 # PREPARATION PHASE
 import datetime
 import os
+
 # import re
 import pprint
+
 # import decimal
 # from decimal import Decimal
 import sys
@@ -12,8 +14,7 @@ import numpy as np
 import openpyxl
 import pandas as pd
 import sidetable
-from openpyxl.styles import (Alignment, Border, Font, PatternFill, Protection,
-                             Side)
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Protection, Side
 from openpyxl.utils import column_index_from_string, get_column_letter
 from pandas.api.types import is_numeric_dtype
 
@@ -24,8 +25,13 @@ pd.set_option("display.max_columns", 100)
 pd.set_option("max_colwidth", 30)
 pd.set_option("expand_frame_repr", False)
 # from функции import rawdata_pererabotka
-from функции import (БФС_подразделения, pd_movecol, pd_toexcel, print_line,
-                     writing_to_excel_openpyxl)
+from функции import (
+    БФС_подразделения,
+    pd_movecol,
+    pd_toexcel,
+    print_line,
+    writing_to_excel_openpyxl,
+)
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # global variables

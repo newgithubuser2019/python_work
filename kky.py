@@ -196,14 +196,20 @@ except KeyError:
 # print("\ndf_pivot")
 # print(df_pivot)
 # sys.exit()
-# df_pivot = df_pivot.explode(["Падеж вес", "Живок вес", "Падеж голов", "Живок голов"])
-df_pivot = df_pivot.explode(["Падеж вес", "Живок вес", "Падеж голов", "Живок голов", "Выбр с/н голов", "Выбр с/н вес"])
+try:
+    df_pivot = df_pivot.explode(["Падеж вес", "Живок вес", "Падеж голов", "Живок голов", "Выбр с/н голов", "Выбр с/н вес"])
+except KeyError:
+    df_pivot = df_pivot.explode(["Падеж вес", "Живок вес", "Падеж голов", "Живок голов"])
 df_pivot.reset_index(inplace = True)
 df_pivot = df_pivot.drop(["index"], axis = 1)
-# df_pivot["Живок голов"] = df_pivot["Живок голов"] + df_pivot["Падеж голов"]
-df_pivot["Живок голов"] = df_pivot["Живок голов"] + df_pivot["Падеж голов"] + df_pivot["Выбр с/н голов"]
-# df_pivot["Живок вес"] = df_pivot["Живок вес"] + df_pivot["Падеж вес"]
-df_pivot["Живок вес"] = df_pivot["Живок вес"] + df_pivot["Падеж вес"] + df_pivot["Выбр с/н вес"]
+try:
+    df_pivot["Живок голов"] = df_pivot["Живок голов"] + df_pivot["Падеж голов"] + df_pivot["Выбр с/н голов"]
+except KeyError:
+    df_pivot["Живок голов"] = df_pivot["Живок голов"] + df_pivot["Падеж голов"]
+try:
+    df_pivot["Живок вес"] = df_pivot["Живок вес"] + df_pivot["Падеж вес"] + df_pivot["Выбр с/н вес"]
+except KeyError:
+    df_pivot["Живок вес"] = df_pivot["Живок вес"] + df_pivot["Падеж вес"]
 # print("\ndf_pivot")
 # print(df_pivot)
 # sys.exit()

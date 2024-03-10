@@ -196,6 +196,18 @@ except KeyError:
 # print("\ndf_pivot")
 # print(df_pivot)
 # sys.exit()
+"""
+функции.pd_toexcel(
+                pd,
+                #
+                filename = filename0a,
+                разновидность = "Лист1",
+                df_для_записи = df_pivot,
+                header_pd = "True",
+                rowtostartin_pd = 0,
+                coltostartin_pd = 0,
+            )
+"""
 try:
     df_pivot = df_pivot.explode(["Падеж вес", "Живок вес", "Падеж голов", "Живок голов", "Выбр с/н голов", "Выбр с/н вес"])
 except KeyError:

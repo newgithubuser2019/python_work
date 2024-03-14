@@ -223,18 +223,28 @@ for i in listoffiles:
                 sheet_name="Убой ШПК",
                 index_col=0,
                 engine = "openpyxl",
-                header=7,
-                usecols = "G,O,V,W",
+                header=6,
+                usecols = "G,O,V,W,Z,AA",
                 # dtype = {"I": str},
                 )
     df_цб.reset_index(inplace = True)
-    df_цб = df_цб.rename(columns={7: "т_сдачи", 14: "д_сдачи", 21: "гол", 22: "вес"})
-    # df_цб = df_цб.dropna(subset=["ОП"])
+    df_цб = df_цб.drop([0], axis = 0) # drop row with index 0
+    df_цб = df_цб.rename(columns={
+        "Сдача (разрежение/основная/досрочная)": "т_сдачи",
+        "Дата сдачи": "д_сдачи",
+        "Кол-во голов без падежа": "гол",
+        "Общий вес без падежа": "вес",
+        "выбраковка с/н, гол.": "выбр_г",
+        "выбраковка с/н, кг": "выбр_в",
+        })
     df_цб["д_сдачи"] = pd.to_datetime(df_цб["д_сдачи"], dayfirst=True)
     df_цб = df_цб.drop(df_цб[(df_цб["д_сдачи"] < дата_меньше)].index)
     df_цб = df_цб.drop(df_цб[(df_цб["д_сдачи"] > дата_больше)].index)
-    df_цб = df_цб.groupby(["т_сдачи", "д_сдачи"], as_index=False).agg({"гол": "sum", "вес": "sum"})
-    # df_цб.loc[df_цб["ОП"].str.contains("Муром"), ["корп"]] = df_цб["корп"]*10
+    df_цб["выбр_г"] = df_цб["выбр_г"].fillna(0)
+    df_цб["выбр_в"] = df_цб["выбр_в"].fillna(0)
+    df_цб = df_цб.groupby(["т_сдачи", "д_сдачи"], as_index=False).agg({"гол": "sum", "вес": "sum", "выбр_г": "sum", "выбр_в": "sum"})
+    df_цб["гол"] = df_цб["гол"] - df_цб["выбр_г"]
+    df_цб["вес"] = df_цб["вес"] - df_цб["выбр_в"]
     df_цб = df_цб.sort_values(by=["д_сдачи", "т_сдачи"], ascending=True)
     df_цб.reset_index(inplace = True)
     df_цб = df_цб.drop(["index"], axis = 1)
@@ -381,34 +391,18 @@ for i in listoffiles:
     print(осн_ср_вес)
     #
     switch_value = 0
-    """
-    if осн_ср_вес < 2.2 or осн_ср_вес == 2.2:
-        switch_value = decimal.Decimal("2.2")
-    if осн_ср_вес > 2.3 or осн_ср_вес == 2.3:
-        switch_value = decimal.Decimal("2.3")
-    if осн_ср_вес > 2.2 and осн_ср_вес < 2.3:
-        switch_value = осн_ср_вес.quantize(decimal.Decimal("0.0"))
-    """
-    if осн_ср_вес >= 2.3:
-        switch_value = decimal.Decimal("2.3")
-    if осн_ср_вес > 2.2 and осн_ср_вес < 2.3:
-        if (осн_ср_вес - decimal.Decimal("2.2")) < (decimal.Decimal("2.3") - осн_ср_вес):
+    if осн_ср_вес >= 2.5:
+        switch_value = decimal.Decimal("2.5")
+    if осн_ср_вес > 2.2 and осн_ср_вес < 2.5:
+        if (осн_ср_вес - decimal.Decimal("2.2")) < (decimal.Decimal("2.5") - осн_ср_вес):
             switch_value = decimal.Decimal("2.2")
-        if (осн_ср_вес - decimal.Decimal("2.2")) > (decimal.Decimal("2.3") - осн_ср_вес):
-            switch_value = decimal.Decimal("2.3")
-        if (осн_ср_вес - decimal.Decimal("2.2")) == (decimal.Decimal("2.3") - осн_ср_вес):
+        if (осн_ср_вес - decimal.Decimal("2.2")) > (decimal.Decimal("2.5") - осн_ср_вес):
+            switch_value = decimal.Decimal("2.5")
+        if (осн_ср_вес - decimal.Decimal("2.2")) == (decimal.Decimal("2.5") - осн_ср_вес):
             switch_value = осн_ср_вес.quantize(decimal.Decimal("0.0"))
     if осн_ср_вес == 2.2:
         switch_value = decimal.Decimal("2.2")
     if осн_ср_вес > 1.75 and осн_ср_вес < 2.2:
-        """
-        if (осн_ср_вес - decimal.Decimal("1.75")) < (decimal.Decimal("2.2") - осн_ср_вес):
-            switch_value = decimal.Decimal("1.75")
-        if (осн_ср_вес - decimal.Decimal("1.75")) > (decimal.Decimal("2.2") - осн_ср_вес):
-            switch_value = decimal.Decimal("2.2")
-        if (осн_ср_вес - decimal.Decimal("1.75")) == (decimal.Decimal("2.2") - осн_ср_вес):
-            switch_value = осн_ср_вес.quantize(decimal.Decimal("0.0"))
-        """
         switch_value = "ср"
     if осн_ср_вес <= 1.75:
         switch_value = decimal.Decimal("1.75")

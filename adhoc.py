@@ -12,6 +12,7 @@ from functools import reduce
 import numpy as np
 import openpyxl
 import pandas as pd
+import plotly.express as px
 
 # import sidetable
 from pandas.tseries.offsets import DateOffset
@@ -59,30 +60,21 @@ df_bez_korma = pd.DataFrame()
 # filename0a = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\_промежуточный файл df_впк.xlsx"
 # filename = USERPROFILE + "\\Documents\\Google Sheets Test.xlsx"
 # filename5 = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\время поднятия кормушки\\время поднятия кормушки.xlsx"
-# filename5 = USERPROFILE + "\\Documents\\Работа\\отдельные поручения\\время поднятия кормушки.xlsx"
-filename5 = "D:\\programming\\_datasets\\просмотры резюме.xlsx"
+# filename5 = "D:\\programming\\_datasets\\просмотры резюме.xlsx"
+filename0 = USERPROFILE + "\\Documents\\Работа\\отдельные поручения\\Тест excel.xlsm"
+filename0b = USERPROFILE + "\\Documents\\Работа\\отдельные поручения\\задание 6 - df.xlsx"
+filename2a = USERPROFILE + "\\Documents\\Работа\\отдельные поручения\\задание 2 - федеральный округ.xlsx"
+filename2b = USERPROFILE + "\\Documents\\Работа\\отдельные поручения\\задание 2 - функциональный блок.xlsx"
 
 # ------------------------------------------------------------------------------------------------------------------------------------------
 df_from_excel = pd.read_excel(
-    filename5,
-    sheet_name="Лист1",
+    filename0,
+    sheet_name="Штатное расписание",
     # index_col=0,
     # engine = "openpyxl",
-    header=0,
-    # usecols = "A,B",
+    header=2,
+    # usecols = "A:L",
+    usecols = "A,C,G,H,I,K",
     )
-# df_from_excel = df_from_excel.loc[(df_from_excel["Вид выбытия"].str.contains("Основная")) | (df_from_excel["Вид выбытия"].str.contains("Разрежение"))]
-# df_from_excel = df_from_excel.dropna(subset=["Время поднятия кормушки"])
-df_from_excel["компания"] = "пусто"
-df_from_excel.loc[df_from_excel["initial"].str.contains(","), ["компания"]] = df_from_excel["initial"]
-df_from_excel["дата"] = None
-df_from_excel.loc[df_from_excel["компания"] == "пусто", ["дата"]] = df_from_excel["initial"]
-df_from_excel = df_from_excel.drop(["initial"], axis = 1)
-df_from_excel["дата"] = df_from_excel["дата"].ffill()
-df_from_excel = df_from_excel.drop(df_from_excel.loc[df_from_excel["компания"]=="пусто"].index)
-df_from_excel.loc[df_from_excel["компания"].str.contains(","), ["компания"]] = df_from_excel["компания"].str.rsplit(",").str[0]
-df_from_excel = df_from_excel.groupby(["компания"], as_index=False).count()
-df_from_excel = df_from_excel.sort_values(by=["дата"], ascending=False)
 print(df_from_excel)
-sys.exit()
-
+# sys.exit()

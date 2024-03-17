@@ -1,24 +1,17 @@
 # IMPORTS
-import os
-from shutil import copyfile
 import json
-import sys
-import openpyxl
-from openpyxl.utils import get_column_letter, column_index_from_string
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
+import os
 import pprint
-
-import pandas as pd
-# import sidetable
+import sys
 from pathlib import Path
-# import fuzzymatcher
-# import recordlinkage
+from shutil import copyfile
 
-from функции import rawdata_po_itogam
-# from функции import pd_readexcel
-from функции import pd_movecol
-from функции import print_line
-# from функции import writing_to_excel_openpyxl
+import openpyxl
+import pandas as pd
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Protection, Side
+from openpyxl.utils import column_index_from_string, get_column_letter
+
+from функции import pd_movecol, print_line, rawdata_po_itogam
 
 pd.set_option("display.max_rows", 1500)
 pd.set_option("display.max_columns", 100)
@@ -1322,7 +1315,7 @@ while True:
                         if os.path.exists(filename10):
                             os.remove(filename10)
                         else:
-                            print("\nCan not delete the file as it doesn"t exist")
+                            print("\nCan not delete the file as it doesn\"t exist")
                     # sys.exit()
                     
                     """

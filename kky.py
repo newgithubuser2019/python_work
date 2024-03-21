@@ -94,7 +94,7 @@ filename5 = USERPROFILE + "\\Documents\\Работа\\отчетность\\еж
 filename6 = USERPROFILE + "\\Documents\\Работа\\отчетность\\ежедневно\\накопительный отчет\\реализация (регистр накопления)\\реализация.xlsx"
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# ВРЕМЯ ПОДНЯТИЯ КОРМУШКИ---------------------------------------------------------------------
+# ВРЕМЯ ПОДНЯТИЯ КОРМУШКИ - df_from_excel---------------------------------------------------------------------
 df_from_excel = pd.read_excel(
     filename5,
     sheet_name="TDSheet",
@@ -152,27 +152,52 @@ df_from_excel["корп"] = df_from_excel["корп"].apply(lambda x: x.replace(
 # sys.exit()
 #
 df_from_excel = df_from_excel.drop(["Корпус"], axis = 1)
-# df_from_excel["pivot_index"] = df_from_excel["Дата и время посадки/выбытия"]+df_from_excel["площ"]+df_from_excel["корп"].astype(str)+df_from_excel["Время поднятия кормушки"]+df_from_excel["Головы"].astype(str)+df_from_excel["Вес, кг"].astype(str)
+df_from_excel.reset_index(inplace = True)
+df_from_excel = df_from_excel.drop(["index"], axis = 1)
+df_from_excel.reset_index(inplace = True)
+df_from_excel = df_from_excel.rename(columns={
+    "index": "номер",
+    })
+df_from_excel.loc[df_from_excel["Причина движения"].str.contains("Падёж в пути"), ["номер"]] = df_from_excel["номер"]-1
+index_list = df_from_excel.index[df_from_excel['Причина движения'] == "Выбраковка сверх нормы"].tolist()
+for i in index_list:
+    if df_from_excel.iloc[i-2]['Причина движения'] == "Сдано на комбинат":
+        df_from_excel.loc[i, ["номер"]] = i-2
+    if df_from_excel.iloc[i-1]['Причина движения'] == "Сдано на комбинат":
+        df_from_excel.loc[i, ["номер"]] = i-1
+"""
+функции.pd_toexcel(
+                pd,
+                #
+                filename = filename0a,
+                разновидность = "Лист1",
+                df_для_записи = df_from_excel,
+                header_pd = "True",
+                rowtostartin_pd = 0,
+                coltostartin_pd = 0,
+            )
+"""
 # print("\ndf_from_excel")
 # print(df_from_excel)
 # sys.exit()
 #
+# colnames_list = list(df_from_excel.columns.values)
+# print(colnames_list)
+
+# ВРЕМЯ ПОДНЯТИЯ КОРМУШКИ - df_pivot---------------------------------------------------------------------
 df_pivot = pd.pivot_table(
     df_from_excel,
-    # index=["Дата и время посадки/выбытия", "площ", "Вид выбытия",  "корп", "Время поднятия кормушки"]
-    # index=["Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки"],
-    index=["Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки", "Мелковесная птица"],
-    # index=["pivot_index", "Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки"],
+    # index=["Дата и время посадки/выбытия", "площ", "корп", "Время поднятия кормушки", "Мелковесная птица"],
+    index=["Дата и время посадки/выбытия", "номер", "площ", "корп", "Время поднятия кормушки", "Мелковесная птица"],
     columns=["Причина движения"],
-    # values=["Головы"],
     values=["Головы", "Вес, кг"],
-    # aggfunc="sum",
     aggfunc=lambda x: list(x),
     fill_value=0,
     )
+# print(df_pivot)
+# sys.exit()
 df_pivot.columns = ['_'.join(col) for col in df_pivot.columns.values]
 df_pivot.reset_index(inplace = True)
-# df_pivot = df_pivot.drop(["pivot_index"], axis = 1)
 df_pivot = df_pivot.rename(columns={
     "Головы_Внешняя реализация": "Р-ция голов",
     "Головы_На мясо": "На мясо голов",
@@ -193,7 +218,22 @@ try:
     df_pivot = df_pivot.drop(["На мясо вес"], axis = 1)
 except KeyError:
     pass
-
+df_pivot = df_pivot[[
+    "Дата и время посадки/выбытия",
+    "площ",
+    "корп",
+    "Мелковесная птица",
+    "Живок голов",
+    "Живок вес",
+    "Падеж голов",
+    "Падеж вес",
+    "Выбр с/н голов",
+    "Выбр с/н вес",
+    "Время поднятия кормушки",
+    ]]
+# df_pivot["len"] = df_pivot["Живок голов"].map(len)
+# df_pivot = df_pivot.sort_values(by=["len"], ascending=True)
+# print(df_pivot.loc[df_pivot["len"]>1]["len"].count())
 функции.pd_toexcel(
                 pd,
                 #
@@ -206,7 +246,8 @@ except KeyError:
             )
 
 # print("\ndf_pivot")
-# print(df_pivot)
+print(df_pivot)
+# print(df_pivot.dtypes)
 # sys.exit()
 try:
     df_pivot = df_pivot.explode(["Падеж вес", "Живок вес", "Падеж голов", "Живок голов", "Выбр с/н голов", "Выбр с/н вес"])

@@ -213,7 +213,8 @@ if inp0 == "старка":
         df_starka["вес"] = df_starka["вес"] - df_starka["п_вес"]
         df_starka = df_starka.drop(["п_гол"], axis = 1)
         df_starka = df_starka.drop(["п_вес"], axis = 1)
-        df_starka = df_starka.drop(df_starka[(df_starka["сдача"] == "Реализация")].index)
+        # df_starka = df_starka.drop(df_starka[(df_starka["сдача"] == "Реализация")].index)
+        df_starka = df_starka.loc[df_starka["сдача"].str.contains("Убой")]
         df_starka = df_starka.drop(["сдача"], axis = 1)
         df_starka.loc[df_starka["ОП"].str.contains("Истобнянская"), ["ОП"]] = "Истобнянская"
         df_starka.loc[df_starka["ОП"].str.contains("Муромская"), ["ОП"]] = "Муромская"
